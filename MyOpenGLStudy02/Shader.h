@@ -9,13 +9,11 @@ public:
 	GLuint ID = 0;
 
 	//空的 后面传入编译才进行Init
-	Shader()
-	{
-	}
-	
+	Shader();
+
 	Shader& Use();
 	void Compile(const GLchar* vertexSource, const GLchar* fragmentSource, const GLchar* geometrySource = nullptr);
-	void Compile(const GLchar* fileSource, const bool* haveGeometry = false);
+	void Compile(const std::string& fileSource, const bool& haveGeometry = false);
 	//Utility functions
 	void SetFloat(const GLchar* name, GLfloat value, bool useShader = false);
 	void SetInteger(const GLchar* name, GLint value, bool useShader = false);
