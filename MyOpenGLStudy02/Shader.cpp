@@ -1,5 +1,7 @@
 ﻿#include "Shader.h"
 
+#include <iostream>
+
 Shader::Shader()
 {
 }
@@ -91,5 +93,80 @@ void Shader::SetVector2f(const GLchar* name, const glm::vec2& value, bool useSha
 	{
 		this->Use();
 	}
-	glUniform2fv(glGetUniformLocation(this->ID, name), 1, &value[0]);
+	//glUniform2fv(glGetUniformLocation(this->ID, name), 1, &value[0]);
+	glUniform2f(glGetUniformLocation(this->ID, name), value.x, value.y);
+}
+
+void Shader::SetVector3f(const GLchar* name, GLfloat x, GLfloat y, GLfloat z, bool useShader)
+{
+	if (useShader)
+	{
+		this->Use();
+	}
+	glUniform3f(glGetUniformLocation(this->ID, name), x, y, z);
+}
+
+void Shader::SetVector3f(const GLchar* name, const glm::vec3& value, bool useShader)
+{
+	if (useShader)
+	{
+		this->Use();
+	}
+	glUniform3f(glGetUniformLocation(this->ID, name), value.x, value.y, value.z);
+}
+
+void Shader::SetVector4f(const GLchar* name, GLfloat x, GLfloat y, bool z, GLfloat w, GLboolean useShader)
+{
+	if (useShader)
+	{
+		this->Use();
+	}
+	glUniform4f(glGetUniformLocation(this->ID, name), x, y, z, w);
+}
+
+void Shader::SetVector4f(const GLchar* name, const glm::vec4& value, bool useShader)
+{
+	if (useShader)
+	{
+		this->Use();
+	}
+	glUniform4f(glGetUniformLocation(this->ID, name), value.x, value.y, value.z, value.w);
+}
+
+void Shader::SetMatrix4x4(const GLchar* name, const glm::mat4& matrix, bool useShader)
+{
+	if (useShader)
+	{
+		this->Use();
+	}
+	glUniformMatrix4fv(glGetUniformLocation(this->ID, name), 1,GL_FALSE, glm::value_ptr(matrix));
+}
+
+void Shader::CheckCompileErrors(GLuint object, std::string type)
+{
+	GLint success;
+	GLchar infoLog[1024];
+
+	if (type != "PROGRAM") //type == "SHADER"
+	{
+		glGetShaderiv(object, GL_COMPILE_STATUS, &success);
+		if (!success)
+		{
+			glGetShaderInfoLog(object, 1024, NULL, infoLog);
+			std::cout << "| ERROR:: SHADER: Compile-time error:Type: " << type << "\n"
+				<< infoLog << "\n -- --------------------------------------------------- -- "
+				<< std::endl;
+		}
+	}
+	else // if(type == "PROGRAM")
+	{
+		glGetProgramiv(object, GL_LINK_STATUS, &success);
+		if (!success)
+		{
+			glGetProgramInfoLog(object, 1024, NULL, infoLog);
+			std::cout << "| ERROR::Shader: Link-time error: Type: " << type << "\n"
+				<< infoLog << "\n -- --------------------------------------------------- -- "
+				<< std::endl;
+		}
+	}
 }
