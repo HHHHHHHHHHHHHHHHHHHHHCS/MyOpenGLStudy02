@@ -12,8 +12,7 @@ public:
 	Shader();
 
 	Shader& Use();
-	void Compile(const GLchar* vertexSource, const GLchar* fragmentSource, const GLchar* geometrySource = nullptr);
-	void Compile(const std::string& fileSource, const bool& haveGeometry = false);
+	void Compile(const GLchar* vertexCode, const GLchar* fragmentCode, const GLchar* geometryCode = nullptr);
 	//Utility functions
 	void SetFloat(const GLchar* name, GLfloat value, bool useShader = false);
 	void SetInteger(const GLchar* name, GLint value, bool useShader = false);

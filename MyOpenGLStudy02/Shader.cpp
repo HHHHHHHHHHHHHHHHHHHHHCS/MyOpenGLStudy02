@@ -12,25 +12,25 @@ Shader& Shader::Use()
 	return *this;
 }
 
-void Shader::Compile(const GLchar* vertexSource, const GLchar* fragmentSource, const GLchar* geometrySource)
+void Shader::Compile(const GLchar* vertexCode, const GLchar* fragmentCode, const GLchar* geometryCode)
 {
 	GLuint vertexShader, fragmentShader, geometryShader;
 
 	//Vertex Shader
 	vertexShader = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(vertexShader, 1, &vertexSource, NULL);
+	glShaderSource(vertexShader, 1, &vertexCode, NULL);
 	glCompileShader(vertexShader);
 	CheckCompileErrors(vertexShader, "VERTEX");
 	//Fragment Shader
 	fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fragmentShader, 1, &fragmentSource, NULL);
+	glShaderSource(fragmentShader, 1, &fragmentCode, NULL);
 	glCompileShader(fragmentShader);
 	CheckCompileErrors(fragmentShader, "FRAGMENT");
 	//Geometry Shader
-	if (geometrySource != nullptr)
+	if (geometryCode != nullptr)
 	{
 		geometryShader = glCreateShader(GL_GEOMETRY_SHADER);
-		glShaderSource(geometryShader, 1, &geometrySource, NULL);
+		glShaderSource(geometryShader, 1, &geometryCode, NULL);
 		glCompileShader(geometryShader);
 		CheckCompileErrors(geometryShader, "GEOMETRY");
 	}
@@ -39,7 +39,7 @@ void Shader::Compile(const GLchar* vertexSource, const GLchar* fragmentSource, c
 	glUseProgram(this->ID);
 	glAttachShader(this->ID, vertexShader);
 	glAttachShader(this->ID, fragmentShader);
-	if (geometrySource != nullptr)
+	if (geometryCode != nullptr)
 	{
 		glAttachShader(this->ID, geometryShader);
 	}
@@ -47,17 +47,10 @@ void Shader::Compile(const GLchar* vertexSource, const GLchar* fragmentSource, c
 	CheckCompileErrors(this->ID, "PROGRAM");
 	glDeleteShader(vertexShader);
 	glDeleteShader(fragmentShader);
-	if (geometrySource != nullptr)
+	if (geometryCode != nullptr)
 	{
 		glDeleteShader(geometryShader);
 	}
-}
-
-
-void Shader::Compile(const std::string& fileSource, const bool& haveGeometry)
-{
-	this->Compile((fileSource + ".vs").c_str(), (fileSource + ".fs").c_str(),
-	              haveGeometry == true ? (fileSource + ".gs").c_str() : nullptr);
 }
 
 void Shader::SetFloat(const GLchar* name, GLfloat value, bool useShader)
