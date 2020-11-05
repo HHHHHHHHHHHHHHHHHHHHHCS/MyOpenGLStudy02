@@ -31,5 +31,5 @@ private:
 
 	static Shader LoadShaderFromFile(const std::string& shaderFile, const GLboolean haveGeometry = false);
 
-	static Texture2D LoadTextureFromFile(const GLchar* file, GLboolean alpha);
+	static Texture2D LoadTextureFromFile(const std::string& file, const std::string& directory,const GLenum isSRGB = false);
 };

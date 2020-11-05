@@ -1,15 +1,2 @@
-﻿  Game.cpp
-  Shader.cpp
-D:\MyStudyProject\MyOpenGLStudy02\MyOpenGLStudy02\Shader.h(22,54): error C2653: “glm”: 不是类或命名空间名称
-D:\MyStudyProject\MyOpenGLStudy02\MyOpenGLStudy02\Shader.h(22,54): error C4430: 缺少类型说明符 - 假定为 int。注意: C++ 不支持默认 int
-D:\MyStudyProject\MyOpenGLStudy02\MyOpenGLStudy02\Shader.h(22,54): error C2143: 语法错误: 缺少“,”(在“&”的前面)
-D:\MyStudyProject\MyOpenGLStudy02\MyOpenGLStudy02\Shader.h(24,54): error C2653: “glm”: 不是类或命名空间名称
-D:\MyStudyProject\MyOpenGLStudy02\MyOpenGLStudy02\Shader.h(24,54): error C4430: 缺少类型说明符 - 假定为 int。注意: C++ 不支持默认 int
-D:\MyStudyProject\MyOpenGLStudy02\MyOpenGLStudy02\Shader.h(24,54): error C2143: 语法错误: 缺少“,”(在“&”的前面)
-D:\MyStudyProject\MyOpenGLStudy02\MyOpenGLStudy02\Shader.h(26,54): error C2653: “glm”: 不是类或命名空间名称
-D:\MyStudyProject\MyOpenGLStudy02\MyOpenGLStudy02\Shader.h(26,54): error C4430: 缺少类型说明符 - 假定为 int。注意: C++ 不支持默认 int
-D:\MyStudyProject\MyOpenGLStudy02\MyOpenGLStudy02\Shader.h(26,54): error C2143: 语法错误: 缺少“,”(在“&”的前面)
-D:\MyStudyProject\MyOpenGLStudy02\MyOpenGLStudy02\Shader.h(27,55): error C2653: “glm”: 不是类或命名空间名称
-D:\MyStudyProject\MyOpenGLStudy02\MyOpenGLStudy02\Shader.h(27,55): error C4430: 缺少类型说明符 - 假定为 int。注意: C++ 不支持默认 int
-D:\MyStudyProject\MyOpenGLStudy02\MyOpenGLStudy02\Shader.h(27,55): error C2143: 语法错误: 缺少“,”(在“&”的前面)
-  正在生成代码...
+﻿  ResourceManager.cpp
+D:\MyStudyProject\MyOpenGLStudy02\MyOpenGLStudy02\ResourceManager.cpp(116): error C4716: “ResourceManager::LoadTextureFromFile”: 必须返回一个值
