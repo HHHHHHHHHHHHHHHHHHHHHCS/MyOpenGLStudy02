@@ -1,7 +1,7 @@
 ﻿#include "ResourceManager.h"
 
 #define STB_IMAGE_IMPLEMENTATION
-#include "../stb-master/stb_image.h"
+#include "stb_image.h"
 
 #include <fstream>
 #include <iostream>
@@ -10,16 +10,19 @@
 std::map<std::string, Texture2D> ResourceManager::textures;
 std::map<std::string, Shader> ResourceManager::shaders;
 
-Shader ResourceManager::LoadShader(const GLchar* vShaderFile, const GLchar* fShaderFile, const GLchar* gShaderFile,
-                                   std::string name)
+Shader ResourceManager::LoadShader(const std::string& name, const GLchar* vShaderFile, const GLchar* fShaderFile,
+                                   const GLchar* gShaderFile, const std::string& directory)
 {
-	shaders[name] = LoadShaderFromFile(vShaderFile, fShaderFile, gShaderFile);
+	shaders[name] = LoadShaderFromFile((directory + vShaderFile).c_str()
+	                                   , (directory + fShaderFile).c_str(),
+	                                   gShaderFile == nullptr ? nullptr : (directory + gShaderFile).c_str());
 	return shaders[name];
 }
 
-Shader ResourceManager::LoadShader(const std::string& shaderFile, std::string name, const GLboolean haveGeometry)
+Shader ResourceManager::LoadShader(const std::string& name, const std::string& shaderFile,
+                                   const std::string& directory, const GLboolean haveGeometry)
 {
-	shaders[name] = LoadShaderFromFile(shaderFile, haveGeometry);
+	shaders[name] = LoadShaderFromFile(directory + shaderFile, haveGeometry);
 	return shaders[name];
 }
 
@@ -28,9 +31,9 @@ Shader ResourceManager::GetShader(const std::string& name)
 	return shaders[name];
 }
 
-Texture2D ResourceManager::LoadTexture(const GLchar* file, GLboolean alpha, std::string name)
+Texture2D ResourceManager::LoadTexture(const std::string& name, const GLchar* file, const std::string& directory)
 {
-	textures[name] = LoadTextureFromFile(file, alpha);
+	textures[name] = LoadTextureFromFile((directory + file).c_str());
 	return textures[name];
 }
 
@@ -105,31 +108,27 @@ Shader ResourceManager::LoadShaderFromFile(const std::string& shaderFile, const 
 	                          , haveGeometry ? (shaderFile + ".gs").c_str() : nullptr);
 }
 
-Texture2D ResourceManager::LoadTextureFromFile(const std::string& file, const std::string& directory,
-                                               const GLenum isSRGB)
+Texture2D ResourceManager::LoadTextureFromFile(const GLchar* file, const GLenum isSRGB)
 {
 	Texture2D texture;
 
+
 	int width, height, nrChannels;
-	unsigned char* data = stbi_load((directory + file).c_str(), &width, &height, &nrChannels, 0);
+	unsigned char* data = stbi_load(file, &width, &height, &nrChannels, 0);
 
 	if (data)
-	{
-		//todo:
-		
-	if(data)
 	{
 		GLenum internalFormat;
 		GLenum dataFormat;
 
-		if(isSRGB)
+		if (isSRGB)
 		{
 			switch (nrChannels)
 			{
-			case  1:
+			case 1:
 				internalFormat = dataFormat = GL_RED;
 				break;
-			case  2:
+			case 2:
 				internalFormat = dataFormat = GL_RG;
 				break;
 			case 3:
@@ -146,10 +145,10 @@ Texture2D ResourceManager::LoadTextureFromFile(const std::string& file, const st
 		{
 			switch (nrChannels)
 			{
-			case  1:
+			case 1:
 				internalFormat = dataFormat = GL_RED;
 				break;
-			case  2:
+			case 2:
 				internalFormat = dataFormat = GL_RG;
 				break;
 			case 3:
@@ -161,28 +160,16 @@ Texture2D ResourceManager::LoadTextureFromFile(const std::string& file, const st
 			}
 		}
 
-		//TODO:
-
-				//第一个是 纹理类型 1D  2D  3D
-		//第二个是 当前图片的mipmap层级,可以自动生成,也可以手动修改层级 设置图片
-		//第三个是 颜色类型 gamma(srgb) linear
-		//第四个是 纹理的宽度
-		//第五个是 纹理的高度
-		//第六个是 总是为0 历史遗留问题
-		//第七个是 图片颜色格式 R RG RGB RGBA
-		//第八个是 图片单个颜色的数据类型
-		//第九个是 图片的数据
-		glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, dataFormat, GL_UNSIGNED_BYTE, data);
-		//自动生成mipmap
-		glGenerateMipmap(GL_TEXTURE_2D);
-
-
-		// 为当前绑定的纹理对象设置环绕、过滤方式
-		// S->X T->Y W->Z 如果是3D 的则有W
-		//GL_TEXTURE_WRAP 是重复方式  GL_TEXTURE_???_FILTER 是放大缩小的滤波方式
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		Texture2D texture;
+		texture.Internal_Format = internalFormat;
+		texture.Image_Format = dataFormat;
+		texture.Generate(width, height, data);
 	}
+	else
+	{
+		std::cout << "Texture failed to load at path: " << file << std::endl;
+	}
+	stbi_image_free(data);
+
+	return texture;
 }

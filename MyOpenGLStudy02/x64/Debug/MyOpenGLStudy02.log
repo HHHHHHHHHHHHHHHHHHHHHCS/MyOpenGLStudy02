@@ -1,2 +1,0 @@
-﻿  ResourceManager.cpp
-D:\MyStudyProject\MyOpenGLStudy02\MyOpenGLStudy02\ResourceManager.cpp(116): error C4716: “ResourceManager::LoadTextureFromFile”: 必须返回一个值

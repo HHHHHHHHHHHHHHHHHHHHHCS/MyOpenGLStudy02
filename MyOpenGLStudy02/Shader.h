@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include <string>
 #include <glad/glad.h>
-#include <glm/gtc/type_ptr.hpp>
+#include <gtc/type_ptr.hpp>
 
 class Shader
 {

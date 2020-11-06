@@ -16,6 +16,6 @@ public:
 	GLuint Filter_Max;
 
 	Texture2D();
-	void Generate(GLuint width, GLuint height, unsigned char* data);
+	void Generate(GLuint width, GLuint height, unsigned char* data,GLboolean mipmap = false);
 	void Bind() const;
 };
