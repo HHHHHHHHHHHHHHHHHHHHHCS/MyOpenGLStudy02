@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include <glad/glad.h>
+#include <GLFW/glfw3.h>
 
 //游戏的状态
 enum GameState
@@ -14,7 +15,7 @@ class Game
 public:
 	// 游戏状态
 	GameState State;
-	GLboolean Keys[1024];
+	GLboolean Keys[GLFW_KEY_LAST + 1];
 	GLuint Width, Height;
 	Game(GLuint width, GLuint height);
 	~Game();
