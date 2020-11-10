@@ -7,8 +7,10 @@
 #include <iostream>
 #include <sstream>
 
-std::map<std::string, Texture2D> ResourceManager::textures;
-std::map<std::string, Shader> ResourceManager::shaders;
+ResourceManager::ResourceManager()
+{
+}
+
 
 Shader ResourceManager::LoadShader(const std::string& name, const GLchar* vShaderFile, const GLchar* fShaderFile,
                                    const GLchar* gShaderFile, const std::string& directory)
