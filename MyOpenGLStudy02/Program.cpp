@@ -1,6 +1,9 @@
 ﻿#include "Program.h"
 
+
+#include <chrono>
 #include <iostream>
+#include <thread>
 
 Program* Program::instance = nullptr;
 
@@ -104,6 +107,7 @@ bool Program::DoLoop()
 		breakout.Render();
 
 		glfwSwapBuffers(window);
+		std::this_thread::sleep_for(std::chrono::milliseconds(6));//最暴力的垂直同步锁帧数 避免while GPU跑满 理论应该差值的  
 	}
 	return true;
 }
