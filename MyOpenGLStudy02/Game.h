@@ -2,6 +2,8 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#include "Camera.h"
+
 //游戏的状态
 enum GameState
 {
@@ -13,6 +15,8 @@ enum GameState
 class Game
 {
 public:
+	Camera camera;
+	
 	// 游戏状态
 	GameState State;
 	GLboolean Keys[GLFW_KEY_LAST + 1];

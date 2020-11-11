@@ -12,6 +12,7 @@ public:
 
 	ResourceManager resourceManager;
 
+
 	Program(GLuint width = 800, GLuint height = 600);
 	~Program();
 
