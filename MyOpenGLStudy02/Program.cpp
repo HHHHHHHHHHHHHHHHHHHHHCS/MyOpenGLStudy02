@@ -75,6 +75,10 @@ bool Program::RegisterEvent()
 
 bool Program::PreLoop()
 {
+	//因为这个游戏完全是2D的，所有顶点都有相同的z值，
+	//所以开启深度测试并没有什么用，反而可能造成深度冲突(Z-fighting)
+	//glEnable(GL_DEPTH_TEST);
+	
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
