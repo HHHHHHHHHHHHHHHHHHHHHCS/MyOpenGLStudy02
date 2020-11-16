@@ -18,4 +18,5 @@ public:
 	Texture2D();
 	void Generate(GLuint width, GLuint height, unsigned char* data,GLboolean mipmap = false);
 	void Bind() const;
+	void Bind(GLubyte i) const;
 };

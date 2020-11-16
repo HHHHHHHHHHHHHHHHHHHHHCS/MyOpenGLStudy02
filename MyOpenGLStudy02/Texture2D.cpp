@@ -7,14 +7,14 @@ Texture2D::Texture2D()
 	glGenTextures(1, &this->ID);
 }
 
-void Texture2D::Generate(GLuint width, GLuint height, unsigned char* data,GLboolean mipmap)
+void Texture2D::Generate(GLuint width, GLuint height, unsigned char* data, GLboolean mipmap)
 {
 	this->Width = width;
 	this->Height = height;
 
 	glBindTexture(GL_TEXTURE_2D, this->ID);
 	glTexImage2D(GL_TEXTURE_2D, 0, this->Internal_Format, width, height, 0, this->Image_Format, GL_UNSIGNED_BYTE, data);
-	if(mipmap)
+	if (mipmap)
 	{
 		glGenerateMipmap(GL_TEXTURE_2D);
 	}
@@ -30,6 +30,13 @@ void Texture2D::Bind() const
 {
 	glBindTexture(GL_TEXTURE_2D, this->ID);
 }
+
+void Texture2D::Bind(GLubyte i) const
+{
+	glActiveTexture(GL_TEXTURE0 + i);
+	glBindTexture(GL_TEXTURE_2D, this->ID);
+}
+
 
 void Texture2D::UnBind()
 {
