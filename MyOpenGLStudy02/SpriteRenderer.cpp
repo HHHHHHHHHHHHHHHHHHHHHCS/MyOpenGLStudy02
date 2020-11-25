@@ -1,5 +1,17 @@
 ﻿#include "SpriteRenderer.h"
 
+SpriteRenderer::SpriteRenderer(Shader& shader)
+{
+	this->shader = shader;
+	InitRenderData();
+}
+
+SpriteRenderer::~SpriteRenderer()
+{
+	glDeleteBuffers(1, &quadVBO);
+	glDeleteVertexArrays(1, &quadVAO);
+}
+
 
 void SpriteRenderer::InitRenderData()
 {
@@ -10,7 +22,7 @@ void SpriteRenderer::InitRenderData()
 
 	isInit = true;
 
-	GLuint VBO;
+	GLuint quadVBO;
 	GLfloat vertices[] = {
 		//位置	//纹理
 		0.0f, 1.0f, 0.0f, 1.0f,
@@ -23,9 +35,9 @@ void SpriteRenderer::InitRenderData()
 	};
 
 	glGenVertexArrays(1, &quadVAO);
-	glGenBuffers(1, &VBO);
+	glGenBuffers(1, &quadVBO);
 
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
 	glBindVertexArray(quadVAO);
@@ -35,7 +47,9 @@ void SpriteRenderer::InitRenderData()
 	glBindVertexArray(0);
 }
 
-void SpriteRenderer::DrawSprite(Texture2D& texture, glm::vec2 position, glm::vec2 size, GLfloat rotate, glm::vec3 color)
+
+void SpriteRenderer::DrawSprite(const Texture2D& texture, glm::vec2 position, glm::vec2 size, GLfloat rotate,
+                                glm::vec3 color)
 {
 	this->shader.Use();
 	glm::mat4 model{1};
@@ -59,5 +73,6 @@ void SpriteRenderer::DrawSprite(Texture2D& texture, glm::vec2 position, glm::vec
 
 	glBindVertexArray(this->quadVAO);
 	glDrawArrays(GL_TRIANGLES, 0, 6);
+	
 	glBindVertexArray(0);
 }

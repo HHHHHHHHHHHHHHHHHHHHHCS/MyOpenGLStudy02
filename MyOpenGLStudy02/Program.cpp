@@ -12,7 +12,7 @@ Program::~Program()
 	instance = nullptr;
 }
 
-Program::Program(GLuint width, GLuint height): breakout(width, height)
+Program::Program(GLuint width, GLuint height): game(width, height)
 {
 	instance = this;
 	screen_width = width;
@@ -83,12 +83,11 @@ bool Program::PreLoop()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	breakout.Init();
+	game.Init();
 
 	deltaTime = 0.0f;
 	lastFrame = 0.0f;
 
-	breakout.State = GameState::GAME_ACTIVE;
 	return true;
 }
 
@@ -96,19 +95,19 @@ bool Program::DoLoop()
 {
 	while (!glfwWindowShouldClose(window))
 	{
-		const GLfloat currentFrame = glfwGetTime();
+		const GLdouble currentFrame = glfwGetTime();
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
 		glfwPollEvents();
 
-		breakout.ProcessInput(deltaTime);
-		breakout.Update(deltaTime);
+		game.ProcessInput(deltaTime);
+		game.Update(deltaTime);
 
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0);
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		breakout.Render();
+		game.Render();
 
 		glfwSwapBuffers(window);
 		std::this_thread::sleep_for(std::chrono::milliseconds(6));//最暴力的垂直同步锁帧数 避免while GPU跑满 理论应该差值的  
@@ -118,7 +117,6 @@ bool Program::DoLoop()
 
 bool Program::EndLoop()
 {
-	resourceManager.Clear();
 	glfwTerminate();
 	return true;
 }
@@ -171,8 +169,8 @@ void Program::KeyCallBack(GLFWwindow* window, int key, int scanCode, int action,
 	if (key >= 0 && key < 1024)
 	{
 		if (action == GLFW_PRESS)
-			instance->breakout.Keys[key] = GL_TRUE;
+			instance->game.keys[key] = GL_TRUE;
 		else if (action == GLFW_RELEASE)
-			instance->breakout.Keys[key] = GL_FALSE;
+			instance->game.keys[key] = GL_FALSE;
 	}
 }

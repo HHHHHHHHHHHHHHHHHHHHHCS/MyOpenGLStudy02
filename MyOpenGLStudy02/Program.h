@@ -10,7 +10,7 @@ class Program
 public:
 	static Program* instance;
 
-	ResourceManager resourceManager;
+	Game game;
 
 
 	Program(GLuint width = 800, GLuint height = 600);
@@ -20,12 +20,11 @@ public:
 
 private:
 	GLFWwindow* window = nullptr;
-	Game breakout;
 
 	GLuint screen_width;
 	GLuint screen_height;
-	GLfloat deltaTime;
-	GLfloat lastFrame;
+	GLdouble deltaTime;
+	GLdouble lastFrame;
 
 	static void FrameBufferSizeCallback(GLFWwindow* window, int width, int height);
 	static void KeyCallBack(GLFWwindow* window, int key, int scanCode, int action, int mode);

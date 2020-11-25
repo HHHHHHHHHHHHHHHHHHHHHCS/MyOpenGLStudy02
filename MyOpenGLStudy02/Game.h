@@ -3,9 +3,11 @@
 #include <GLFW/glfw3.h>
 
 #include "Camera.h"
+#include "ResourceManager.h"
+#include "SpriteRenderer.h"
 
 //游戏的状态
-enum GameState
+enum class GameState
 {
 	GAME_ACTIVE,
 	GAME_MENU,
@@ -16,17 +18,20 @@ class Game
 {
 public:
 	Camera camera;
+	ResourceManager resourceManager;
+	SpriteRenderer* spriteRenderer;
+
 	
 	// 游戏状态
-	GameState State;
-	GLboolean Keys[GLFW_KEY_LAST + 1];
-	GLuint Width, Height;
-	Game(GLuint width, GLuint height);
+	GameState state;
+	GLboolean keys[GLFW_KEY_LAST + 1];
+	GLuint width, height;
+	Game(GLuint _width, GLuint _height);
 	~Game();
 	//初始化游戏状态（加载所有的着色器/纹理/关卡）
 	void Init();
 	//游戏循环
-	void ProcessInput(GLfloat dt);
-	void Update(GLfloat dt);
+	void ProcessInput(GLdouble dt);
+	void Update(GLdouble dt);
 	void Render();
 };

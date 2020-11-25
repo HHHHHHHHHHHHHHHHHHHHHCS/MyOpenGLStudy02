@@ -120,8 +120,8 @@ Texture2D ResourceManager::LoadTextureFromFile(const GLchar* file, const GLenum 
 
 	if (data)
 	{
-		GLenum internalFormat;
-		GLenum dataFormat;
+		GLenum internalFormat = GL_RGBA;
+		GLenum dataFormat = GL_RGBA;
 
 		if (isSRGB)
 		{
