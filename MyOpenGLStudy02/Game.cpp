@@ -1,5 +1,7 @@
 #include "Game.h"
 
+#include <iostream>
+
 Game::Game(GLuint _width, GLuint _height)
 {
 	memset(keys, 0, sizeof(keys));
@@ -8,7 +10,7 @@ Game::Game(GLuint _width, GLuint _height)
 	GLuint halfWidth = _width / 2;
 	GLuint halfHeight = _height / 2;
 
-	camera.Init(glm::vec3(halfWidth, halfHeight, 0), glm::vec3(0, 0, 0), glm::vec3(halfWidth, halfHeight, 1));
+	camera.Init(glm::vec3(halfWidth, halfHeight, 0), glm::vec3(0, 180, 0), glm::vec3(halfWidth, halfHeight, 1));
 }
 
 Game::~Game()
@@ -18,10 +20,10 @@ Game::~Game()
 void Game::Init()
 {
 	state = GameState::GAME_ACTIVE;
-	Shader spriteShader = resourceManager.LoadShader("sprite", "sprite");
+	Shader spriteShader = resourceManager.LoadShader("sprite", "Sprite");
 	spriteShader.Use().SetInteger("image", 0);
 	spriteShader.SetMatrix4x4("viewProjection", camera.GetViewProjection());
-	resourceManager.LoadTexture("face", "awesomeface.png");
+	resourceManager.LoadTexture("face", "awesomeface.jpg");
 	spriteRenderer = new SpriteRenderer(spriteShader);
 }
 

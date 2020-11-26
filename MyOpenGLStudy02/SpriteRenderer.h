@@ -17,7 +17,7 @@ public:
 
 private:
 	Shader shader;
-	GLboolean isInit;
+	GLboolean isInit ;
 	GLuint quadVAO;
 	GLuint quadVBO;
 

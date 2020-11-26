@@ -13,14 +13,14 @@ public:
 	ResourceManager();
 
 	Shader LoadShader(const std::string& name, const GLchar* vShaderFile, const GLchar* fShaderFile,
-	                  const GLchar* gShaderFile = nullptr, const std::string& directory = "Shader/");
+	                  const GLchar* gShaderFile = nullptr, const std::string& directory = "Shaders/");
 
 	Shader LoadShader(const std::string& name, const std::string& shaderFile,
-	                  const std::string& directory = "Shader/", const GLboolean haveGeometry = false);
+	                  const std::string& directory = "Shaders/", const GLboolean haveGeometry = false);
 
 	Shader GetShader(const std::string& name);
 
-	Texture2D LoadTexture(const std::string& name, const GLchar* file, const std::string& directory = "Image/");
+	Texture2D LoadTexture(const std::string& name, const GLchar* file, const std::string& directory = "Images/");
 
 	Texture2D GetTexture(const std::string& name);
 

@@ -1,5 +1,7 @@
 ﻿#include "Camera.h"
 
+#include <iostream>
+
 void Camera::Init(glm::vec3 pos, glm::vec3 rot, glm::vec3 size)
 {
 	SetPosition(pos);
@@ -50,13 +52,13 @@ glm::mat4 Camera::GetViewMat4()
 	rotFlag = false;
 
 	viewMat4 = glm::mat4(1.0f);
+	viewMat4 = glm::translate(viewMat4, position);
 	viewMat4 = glm::rotate(viewMat4, glm::radians(rotation.y), glm::vec3(0.0, 1.0, 0.0));
 	viewMat4 = glm::rotate(viewMat4, glm::radians(rotation.x), glm::vec3(1.0, 0.0, 0.0));
 	viewMat4 = glm::rotate(viewMat4, glm::radians(rotation.z), glm::vec3(0.0, 0.0, 1.0));
-	viewMat4 = inverse(glm::translate(viewMat4, position));
+	viewMat4 = inverse(viewMat4);
 
-	//viewMat4 = glm::lookAt(position, position + glm::vec3(0, 0, 1), glm::vec3(0, 1, 0));
-
+	
 	return viewMat4;
 }
 

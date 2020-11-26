@@ -68,7 +68,15 @@ Shader ResourceManager::LoadShaderFromFile(const GLchar* vShaderFile, const GLch
 	{
 		//file stream
 		std::ifstream vertexShaderFile(vShaderFile);
+		if (vertexShaderFile.good() == 0)
+		{
+			std::cout << "ERROR::SHADER:Can't read shader file ! Path:" << vShaderFile << std::endl;
+		}
 		std::ifstream fragmentShaderFile(fShaderFile);
+		if (fragmentShaderFile.good() == 0)
+		{
+			std::cout << "ERROR::SHADER:Can't read shader file ! Path:" << fShaderFile << std::endl;
+		}
 		//string stream
 		std::stringstream vShaderStream, fShaderStream;
 		//load string to string stream from file stream
@@ -83,6 +91,10 @@ Shader ResourceManager::LoadShaderFromFile(const GLchar* vShaderFile, const GLch
 		if (gShaderFile != nullptr)
 		{
 			std::ifstream geometryShaderFile(gShaderFile);
+			if (geometryShaderFile.good() == 0)
+			{
+				std::cout << "ERROR::SHADER:Can't read shader file ! Path:" << gShaderFile << std::endl;
+			}
 			std::stringstream gShaderStream;
 			gShaderStream << geometryShaderFile.rdbuf();
 			geometryShaderFile.close();
