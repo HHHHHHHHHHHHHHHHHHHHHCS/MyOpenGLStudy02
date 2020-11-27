@@ -26,12 +26,13 @@ void SpriteRenderer::InitRenderData()
 	GLfloat vertices[] = {
 		//位置	//纹理
 		0.0f, 1.0f, 0.0f, 1.0f,
-		1.0f, 0.0f, 1.0f, 0.0f,
 		0.0f, 0.0f, 0.0f, 0.0f,
+		1.0f, 0.0f, 1.0f, 0.0f,
+
 
 		0.0f, 1.0f, 0.0f, 1.0f,
+		1.0f, 0.0f, 1.0f, 0.0f,
 		1.0f, 1.0f, 1.0f, 1.0f,
-		1.0f, 0.0f, 1.0f, 0.0f
 	};
 
 	glGenVertexArrays(1, &quadVAO);

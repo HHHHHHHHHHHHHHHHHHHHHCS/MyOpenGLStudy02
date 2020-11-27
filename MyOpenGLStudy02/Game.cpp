@@ -13,9 +13,6 @@ Game::Game(GLuint _width, GLuint _height)
 	GLuint halfHeight = _height / 2;
 
 	camera.Init(glm::vec3(halfWidth, halfHeight, 0), glm::vec3(0, 0, 0), glm::vec3(halfWidth, halfHeight, 1));
-
-
-
 }
 
 Game::~Game()
@@ -30,20 +27,6 @@ void Game::Init()
 	spriteShader.SetMatrix4x4("viewProjection", camera.GetViewProjection());
 	resourceManager.LoadTexture("face", "awesomeface.jpg");
 	spriteRenderer = new SpriteRenderer(spriteShader);
-
-
-	DebugLog::Print(camera.GetProjectionMat4());
-
-	glm::vec4 xx = glm::vec4(0, 0, 1, 1);
-	xx = camera.GetViewMat4() * xx;
-
-	DebugLog::Print(xx);
-
-
-	glm::vec4 yy = glm::vec4(800, 600, 1, 1);
-	yy = camera.GetViewMat4() * yy;
-
-	DebugLog::Print(yy);
 }
 
 void Game::ProcessInput(GLdouble dt)
