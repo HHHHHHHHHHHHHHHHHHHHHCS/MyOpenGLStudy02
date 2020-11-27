@@ -79,7 +79,9 @@ bool Program::PreLoop()
 	//所以开启深度测试并没有什么用，反而可能造成深度冲突(Z-fighting)
 	//glEnable(GL_DEPTH_TEST);
 	
-	 glEnable(GL_CULL_FACE);
+	glEnable(GL_CULL_FACE);
+	glFrontFace(GL_CW);
+	
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -104,7 +106,7 @@ bool Program::DoLoop()
 		game.ProcessInput(deltaTime);
 		game.Update(deltaTime);
 
-		glClearColor(0.0f, 1.0f, 0.0f, 1.0);
+		glClearColor(0.0f, 0.0f, 0.0f, 1.0);
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		game.Render();

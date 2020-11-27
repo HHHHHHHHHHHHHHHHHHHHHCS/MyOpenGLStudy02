@@ -15,17 +15,15 @@ ResourceManager::ResourceManager()
 Shader ResourceManager::LoadShader(const std::string& name, const GLchar* vShaderFile, const GLchar* fShaderFile,
                                    const GLchar* gShaderFile, const std::string& directory)
 {
-	shaders[name] = LoadShaderFromFile((directory + vShaderFile).c_str()
+	return shaders[name] = LoadShaderFromFile((directory + vShaderFile).c_str()
 	                                   , (directory + fShaderFile).c_str(),
 	                                   gShaderFile == nullptr ? nullptr : (directory + gShaderFile).c_str());
-	return shaders[name];
 }
 
 Shader ResourceManager::LoadShader(const std::string& name, const std::string& shaderFile,
                                    const std::string& directory, const GLboolean haveGeometry)
 {
-	shaders[name] = LoadShaderFromFile(directory + shaderFile, haveGeometry);
-	return shaders[name];
+	return shaders[name] = LoadShaderFromFile(directory + shaderFile, haveGeometry);
 }
 
 Shader ResourceManager::GetShader(const std::string& name)
@@ -35,8 +33,7 @@ Shader ResourceManager::GetShader(const std::string& name)
 
 Texture2D ResourceManager::LoadTexture(const std::string& name, const GLchar* file, const std::string& directory)
 {
-	textures[name] = LoadTextureFromFile((directory + file).c_str());
-	return textures[name];
+	return textures[name] = LoadTextureFromFile((directory + file).c_str());
 }
 
 Texture2D ResourceManager::GetTexture(const std::string& name)
@@ -124,6 +121,8 @@ Shader ResourceManager::LoadShaderFromFile(const std::string& shaderFile, const 
 
 Texture2D ResourceManager::LoadTextureFromFile(const GLchar* file, const GLenum isSRGB)
 {
+	stbi_set_flip_vertically_on_load(true);
+
 	Texture2D texture;
 
 
@@ -174,7 +173,6 @@ Texture2D ResourceManager::LoadTextureFromFile(const GLchar* file, const GLenum 
 			}
 		}
 
-		Texture2D texture;
 		texture.Internal_Format = internalFormat;
 		texture.Image_Format = dataFormat;
 		texture.Generate(width, height, data);
@@ -184,6 +182,7 @@ Texture2D ResourceManager::LoadTextureFromFile(const GLchar* file, const GLenum 
 		std::cout << "Texture failed to load at path: " << file << std::endl;
 	}
 	stbi_image_free(data);
+	stbi_set_flip_vertically_on_load(false);
 
 	return texture;
 }

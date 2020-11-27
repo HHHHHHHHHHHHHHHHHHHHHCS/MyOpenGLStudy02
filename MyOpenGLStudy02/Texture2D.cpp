@@ -7,6 +7,7 @@ Texture2D::Texture2D()
 	glGenTextures(1, &this->ID);
 }
 
+//UI 2D 基本都不需要mimap
 void Texture2D::Generate(GLuint width, GLuint height, unsigned char* data, GLboolean mipmap)
 {
 	this->Width = width;

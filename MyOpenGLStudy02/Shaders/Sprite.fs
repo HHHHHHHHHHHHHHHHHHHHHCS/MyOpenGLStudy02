@@ -11,4 +11,6 @@ void main()
 {
 	//TODO: texture is black
 	color=vec4(spriteColor,1.)*texture(image,TexCoords);
+	color=texture(image,TexCoords);
+
 }

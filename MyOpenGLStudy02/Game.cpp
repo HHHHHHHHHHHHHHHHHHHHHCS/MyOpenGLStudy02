@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+#include "DebugLog.h"
+
 Game::Game(GLuint _width, GLuint _height)
 {
 	memset(keys, 0, sizeof(keys));
@@ -10,7 +12,10 @@ Game::Game(GLuint _width, GLuint _height)
 	GLuint halfWidth = _width / 2;
 	GLuint halfHeight = _height / 2;
 
-	camera.Init(glm::vec3(halfWidth, halfHeight, 0), glm::vec3(0, 180, 0), glm::vec3(halfWidth, halfHeight, 1));
+	camera.Init(glm::vec3(halfWidth, halfHeight, 0), glm::vec3(0, 0, 0), glm::vec3(halfWidth, halfHeight, 1));
+
+
+
 }
 
 Game::~Game()
@@ -25,6 +30,20 @@ void Game::Init()
 	spriteShader.SetMatrix4x4("viewProjection", camera.GetViewProjection());
 	resourceManager.LoadTexture("face", "awesomeface.jpg");
 	spriteRenderer = new SpriteRenderer(spriteShader);
+
+
+	DebugLog::Print(camera.GetProjectionMat4());
+
+	glm::vec4 xx = glm::vec4(0, 0, 1, 1);
+	xx = camera.GetViewMat4() * xx;
+
+	DebugLog::Print(xx);
+
+
+	glm::vec4 yy = glm::vec4(800, 600, 1, 1);
+	yy = camera.GetViewMat4() * yy;
+
+	DebugLog::Print(yy);
 }
 
 void Game::ProcessInput(GLdouble dt)
@@ -37,6 +56,11 @@ void Game::Update(GLdouble dt)
 
 void Game::Render()
 {
-	spriteRenderer->DrawSprite(resourceManager.GetTexture("face"), glm::vec2(200, 200)
-	                           , glm::vec2(300, 400), 45.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+	spriteRenderer->DrawSprite(resourceManager.GetTexture("face"), glm::vec2(0, 0)
+	                           , glm::vec2(300, 400), 0.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+
+	spriteRenderer->DrawSprite(resourceManager.GetTexture("face"), glm::vec2(400, 300)
+		, glm::vec2(300, 400), 0.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+
+
 }

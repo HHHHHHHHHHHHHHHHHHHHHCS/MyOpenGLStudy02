@@ -11,7 +11,9 @@ class SpriteRenderer
 public:
 	SpriteRenderer(Shader& shader);
 	~SpriteRenderer();
-
+	
+	glm::mat4 ModelMatrix(glm::vec2 position, glm::vec2 size, GLfloat rotate) const;
+	
 	void DrawSprite(const Texture2D& texture, glm::vec2 position, glm::vec2 size = glm::vec2(10, 10)
 	                , GLfloat rotate = 0.0f, glm::vec3 color = glm::vec3(1.0f));
 

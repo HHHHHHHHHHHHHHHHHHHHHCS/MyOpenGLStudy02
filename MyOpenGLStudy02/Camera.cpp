@@ -57,7 +57,6 @@ glm::mat4 Camera::GetViewMat4()
 	viewMat4 = glm::rotate(viewMat4, glm::radians(rotation.x), glm::vec3(1.0, 0.0, 0.0));
 	viewMat4 = glm::rotate(viewMat4, glm::radians(rotation.z), glm::vec3(0.0, 0.0, 1.0));
 	viewMat4 = inverse(viewMat4);
-
 	
 	return viewMat4;
 }
@@ -77,7 +76,7 @@ glm::mat4 Camera::GetProjectionMat4()
 	float z = size.z;
 
 	//opengl y是相反的
-	projMat4 = glm::ortho(-x, + x, - y, y, -z, z);
+	projMat4 = glm::orthoLH_ZO(-x, +x, -y, +y, -z, +z);
 
 	return projMat4;
 }
