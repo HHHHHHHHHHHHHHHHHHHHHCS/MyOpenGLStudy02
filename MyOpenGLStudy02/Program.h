@@ -3,7 +3,6 @@
 #include <GLFW/glfw3.h>
 
 #include "Game.h"
-#include "ResourceManager.h"
 
 class Program
 {

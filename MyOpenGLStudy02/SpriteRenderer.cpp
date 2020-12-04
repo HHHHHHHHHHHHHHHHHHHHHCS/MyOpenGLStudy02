@@ -48,9 +48,10 @@ void SpriteRenderer::InitRenderData()
 	glBindVertexArray(0);
 }
 
-glm::mat4 SpriteRenderer::ModelMatrix(glm::vec2 position, glm::vec2 size, GLfloat rotate) const
+glm::mat4 SpriteRenderer::ModelMatrix(const glm::vec2& position
+                                      , const glm::vec2& size, GLfloat rotate) const
 {
-	glm::mat4 model{ 1 };
+	glm::mat4 model{1};
 
 	//position
 	model = glm::translate(model, glm::vec3(position, 0.0f));
@@ -66,12 +67,12 @@ glm::mat4 SpriteRenderer::ModelMatrix(glm::vec2 position, glm::vec2 size, GLfloa
 	return model;
 }
 
-void SpriteRenderer::DrawSprite(const Texture2D& texture, glm::vec2 position, glm::vec2 size, GLfloat rotate,
-                                glm::vec3 color)
+void SpriteRenderer::DrawSprite(const Texture2D& texture, const glm::vec2& position, const glm::vec2& size
+                                , GLfloat rotate, const glm::vec3& color)
 {
 	this->shader.Use();
 
-	const glm::mat4 model = ModelMatrix(position, size, rotate);
+	const glm::mat4& model = ModelMatrix(position, size, rotate);
 
 	this->shader.SetMatrix4x4("model", model);
 	this->shader.SetVector3f("spriteColor", color);

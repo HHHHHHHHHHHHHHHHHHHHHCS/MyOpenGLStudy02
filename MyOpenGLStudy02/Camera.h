@@ -7,15 +7,15 @@
 class Camera
 {
 public:
-	void Init(glm::vec3 pos = glm::vec3(400, 300, 0), glm::vec3 rot = glm::vec3(0, 0, 0),
-	       glm::vec3 size = glm::vec3(800, 600, 1));
+	void Init(const glm::vec3& pos = glm::vec3(400, 300, 0), const glm::vec3& rot = glm::vec3(0, 0, 0),
+	          const glm::vec3& size = glm::vec3(800, 600, 1));
 
 	glm::vec3 GetPosition() const;
-	void SetPosition(glm::vec3 val);
+	void SetPosition(const glm::vec3& val);
 	glm::vec3 GetRotation() const;
-	void SetRotation(glm::vec3 val);
+	void SetRotation(const glm::vec3& val);
 	glm::vec3 GetSize() const;
-	void SetSize(glm::vec3 val);
+	void SetSize(const glm::vec3& val);
 
 	glm::mat4 GetViewMat4();
 	glm::mat4 GetProjectionMat4();

@@ -16,7 +16,7 @@ public:
 	                  const GLchar* gShaderFile = nullptr, const std::string& directory = "Shaders/");
 
 	Shader LoadShader(const std::string& name, const std::string& shaderFile,
-	                  const std::string& directory = "Shaders/", const GLboolean haveGeometry = false);
+	                  const std::string& directory = "Shaders/", GLboolean haveGeometry = false);
 
 	Shader GetShader(const std::string& name);
 
@@ -30,7 +30,7 @@ private:
 
 	Shader LoadShaderFromFile(const GLchar* vShaderFile, const GLchar* fShaderFile, const GLchar* gShaderFile);
 
-	Shader LoadShaderFromFile(const std::string& shaderFile, const GLboolean haveGeometry = false);
+	Shader LoadShaderFromFile(const std::string& shaderFile, GLboolean haveGeometry = false);
 
-	Texture2D LoadTextureFromFile(const GLchar* file, const GLenum isSRGB = false);
+	Texture2D LoadTextureFromFile(const GLchar* file, GLenum isSRGB = false);
 };

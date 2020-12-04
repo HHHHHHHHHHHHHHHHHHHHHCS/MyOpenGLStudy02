@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-void Camera::Init(glm::vec3 pos, glm::vec3 rot, glm::vec3 size)
+void Camera::Init(const glm::vec3& pos, const glm::vec3& rot, const glm::vec3& size)
 {
 	SetPosition(pos);
 	SetRotation(rot);
@@ -14,7 +14,7 @@ glm::vec3 Camera::GetPosition() const
 	return this->position;
 }
 
-void Camera::SetPosition(glm::vec3 val)
+void Camera::SetPosition(const glm::vec3& val)
 {
 	this->position = val;
 	posFlag = true;
@@ -25,7 +25,7 @@ glm::vec3 Camera::GetRotation() const
 	return this->rotation;
 }
 
-void Camera::SetRotation(glm::vec3 val)
+void Camera::SetRotation(const glm::vec3& val)
 {
 	this->rotation = val;
 	rotFlag = true;
@@ -36,7 +36,7 @@ glm::vec3 Camera::GetSize() const
 	return this->size;
 }
 
-void Camera::SetSize(glm::vec3 val)
+void Camera::SetSize(const glm::vec3& val)
 {
 	this->size = val;
 	sizeFlag = true;
