@@ -1,8 +1,10 @@
 ﻿#pragma once
+#include <vector>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
 #include "Camera.h"
+#include "GameLevel.h"
 #include "ResourceManager.h"
 #include "SpriteRenderer.h"
 
@@ -21,11 +23,16 @@ public:
 	ResourceManager resourceManager;
 	SpriteRenderer* spriteRenderer;
 
-	
+	//关卡相关
+	std::vector<GameLevel> levels;
+	GLuint level;
+
 	// 游戏状态
 	GameState state;
 	GLboolean keys[GLFW_KEY_LAST + 1];
 	GLuint width, height;
+
+
 	Game(GLuint _width, GLuint _height);
 	~Game();
 	//初始化游戏状态（加载所有的着色器/纹理/关卡）

@@ -61,20 +61,51 @@ void GameLevel::Init(const std::vector<std::vector<GLuint>>& tileData, GLuint le
 	//步长
 	GLfloat unit_width = levelWidth / static_cast<GLfloat>(width);
 	GLfloat unit_height = levelHeight / static_cast<GLfloat>(height);
+
+	glm::vec2 size(unit_width, unit_height);
+
+	
 	for (GLuint y = 0; y < height; ++y)
 	{
 		for (GLuint x = 0; x < width; ++x)
 		{
+			glm::vec2 pos(unit_width * x, unit_height * y);
+			glm::vec3 color = glm::vec3(1.0f);//默认为白色
+			std::string texturePath;
+			GLboolean isSolid = GL_FALSE;
+			
 			if (tileData[y][x] == 1)
 			{
-				glm::vec2 pos(unit_width * x, unit_height * y);
-				glm::vec2 size(unit_width, unit_height);
-				GameObject obj(pos, size
-				               , Program::instance->game.resourceManager.GetTexture("block_solid")
-				               , glm::vec3(0.8f, 0.8f, 0.7f));
-				obj.isSolid = GL_TRUE;
-				this->bricks.push_back(obj);
+				isSolid = GL_TRUE;
+				color = glm::vec3(0.8f, 0.8f, 0.7f);
+				texturePath = "block_solid";
 			}
+			else if(tileData[y][x] > 1)
+			{
+				if (tileData[y][x] == 2)
+				{
+					color = glm::vec3(0.2f, 0.6f, 1.0f);
+				}
+				else if (tileData[y][x] == 3)
+				{
+					color = glm::vec3(0.0f, 0.7f, 0.0f);
+				}
+				else if (tileData[y][x] == 4)
+				{
+					color = glm::vec3(0.8f, 0.8f, 0.4f);
+				}
+				else if (tileData[y][x] == 5)
+				{
+					color = glm::vec3(1.0f, 0.5f, 0.0f);
+				}
+
+				texturePath = "block";
+			}
+
+			GameObject obj = GameObject(pos, size
+				, Program::instance->game.resourceManager.GetTexture(texturePath)
+				, color);
+			this->bricks.emplace_back(obj);
 		}
 	}
 }

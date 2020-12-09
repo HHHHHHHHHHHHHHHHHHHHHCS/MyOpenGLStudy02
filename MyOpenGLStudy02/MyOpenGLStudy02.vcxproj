@@ -161,6 +161,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="ConstConfigure.cpp" />
     <ClCompile Include="DebugLog.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameLevel.cpp" />
@@ -175,6 +176,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="ConstConfigure.h" />
     <ClInclude Include="DebugLog.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameLevel.h" />
