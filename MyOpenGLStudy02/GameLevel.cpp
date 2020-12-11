@@ -51,36 +51,37 @@ void GameLevel::Draw(const SpriteRenderer& renderer)
 //检查一个关卡是否完成(所有非坚硬的块都被摧毁)
 GLboolean GameLevel::IsCompleted()
 {
+	return true;
 }
 
 //初始化数据
 void GameLevel::Init(const std::vector<std::vector<GLuint>>& tileData, GLuint levelWidth, GLuint levelHeight)
 {
-	GLuint height = tileData.size();
-	GLuint width = tileData[0].size();
+	GLuint height = static_cast<GLuint>(tileData.size());
+	GLuint width = static_cast<GLuint>(tileData[0].size());
 	//步长
 	GLfloat unit_width = levelWidth / static_cast<GLfloat>(width);
 	GLfloat unit_height = levelHeight / static_cast<GLfloat>(height);
 
 	glm::vec2 size(unit_width, unit_height);
 
-	
+
 	for (GLuint y = 0; y < height; ++y)
 	{
 		for (GLuint x = 0; x < width; ++x)
 		{
 			glm::vec2 pos(unit_width * x, unit_height * y);
-			glm::vec3 color = glm::vec3(1.0f);//默认为白色
+			glm::vec3 color = glm::vec3(1.0f); //默认为白色
 			std::string texturePath;
 			GLboolean isSolid = GL_FALSE;
-			
+
 			if (tileData[y][x] == 1)
 			{
 				isSolid = GL_TRUE;
 				color = glm::vec3(0.8f, 0.8f, 0.7f);
 				texturePath = "block_solid";
 			}
-			else if(tileData[y][x] > 1)
+			else if (tileData[y][x] > 1)
 			{
 				if (tileData[y][x] == 2)
 				{
@@ -103,8 +104,8 @@ void GameLevel::Init(const std::vector<std::vector<GLuint>>& tileData, GLuint le
 			}
 
 			GameObject obj = GameObject(pos, size
-				, Program::instance->game.resourceManager.GetTexture(texturePath)
-				, color);
+			                            , Program::instance->game.resourceManager.GetTexture(texturePath)
+			                            , color);
 			this->bricks.emplace_back(obj);
 		}
 	}

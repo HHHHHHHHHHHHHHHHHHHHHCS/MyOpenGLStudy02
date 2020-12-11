@@ -41,4 +41,7 @@ public:
 	void ProcessInput(GLdouble dt);
 	void Update(GLdouble dt);
 	void Render();
+
+private:
+	void InitRes();
 };
