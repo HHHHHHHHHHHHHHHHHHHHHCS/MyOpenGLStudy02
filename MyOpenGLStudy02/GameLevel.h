@@ -2,6 +2,8 @@
 
 #include <vector>
 
+
+#include "ConstConfigure.h"
 #include "GameObject.h"
 
 class GameLevel
@@ -14,9 +16,9 @@ public:
 	}
 
 	//从文件中加载关卡
-	void Load(const GLchar* file, GLuint levelWidth, GLuint levelHeight);
+	void Load(const std::string& file, GLuint levelWidth, GLuint levelHeight, const std::string& directory = ConstConfigure::Level_Directory);
 	//渲染关卡
-	void Draw(const SpriteRenderer& renderer);
+	void Draw(SpriteRenderer& renderer);
 	//检查一个关卡是否完成(所有非坚硬的块都被摧毁)
 	GLboolean IsCompleted();
 private:

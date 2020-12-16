@@ -1,5 +1,7 @@
 ﻿#include "GameObject.h"
 
+#include "DebugLog.h"
+
 GameObject::GameObject()
 	: position(0, 0), size(1, 1), velocity(0, 0), rotation(0)
 	  , isSolid(false), destroyed(false), sprite()
