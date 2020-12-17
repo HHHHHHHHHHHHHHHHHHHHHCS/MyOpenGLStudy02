@@ -22,8 +22,8 @@ private:
 
 	GLuint screen_width;
 	GLuint screen_height;
-	GLdouble deltaTime;
-	GLdouble lastFrame;
+	GLfloat deltaTime;
+	GLfloat lastFrame;
 
 	static void FrameBufferSizeCallback(GLFWwindow* window, int width, int height);
 	static void KeyCallBack(GLFWwindow* window, int key, int scanCode, int action, int mode);

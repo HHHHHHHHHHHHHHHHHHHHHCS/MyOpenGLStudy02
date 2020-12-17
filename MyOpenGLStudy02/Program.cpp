@@ -78,7 +78,7 @@ bool Program::PreLoop()
 	//因为这个游戏完全是2D的，所有顶点都有相同的z值，
 	//所以开启深度测试并没有什么用，反而可能造成深度冲突(Z-fighting)
 	//glEnable(GL_DEPTH_TEST);
-	
+
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -95,7 +95,7 @@ bool Program::DoLoop()
 {
 	while (!glfwWindowShouldClose(window))
 	{
-		const GLdouble currentFrame = glfwGetTime();
+		const GLfloat currentFrame = static_cast<GLfloat>(glfwGetTime());
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
@@ -110,7 +110,7 @@ bool Program::DoLoop()
 		game.Render();
 
 		glfwSwapBuffers(window);
-		std::this_thread::sleep_for(std::chrono::milliseconds(6));//最暴力的垂直同步锁帧数 避免while GPU跑满 理论应该差值的  
+		std::this_thread::sleep_for(std::chrono::milliseconds(6)); //最暴力的垂直同步锁帧数 避免while GPU跑满 理论应该差值的  
 	}
 	return true;
 }

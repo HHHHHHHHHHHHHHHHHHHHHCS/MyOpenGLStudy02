@@ -17,7 +17,7 @@ public:
 	glm::vec3 color;
 	GLfloat rotation;
 	GLboolean isSolid; //是不是坚硬的 不可摧毁的
-	GLboolean destroyed;
+	GLboolean destroyed = false;
 	//render state
 	Texture2D sprite;
 	//constructor(s)

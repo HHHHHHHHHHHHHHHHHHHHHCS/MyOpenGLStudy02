@@ -12,10 +12,14 @@ public:
 	static const std::string Image_BlockPath;
 	static const std::string Image_BlockSolidKey;
 	static const std::string Image_BlockSolidPath;
+	static const std::string Image_PaddleKey;
+	static const std::string Image_PaddlePath;
+
 	//Shader
 	static const std::string Shader_Directory;
 	static const std::string Shader_SpriteKey;
 	static const std::string Shader_SpritePath;
+
 	//Levels
 	static const std::string Level_Directory;
 	static const std::string Level_1Key;

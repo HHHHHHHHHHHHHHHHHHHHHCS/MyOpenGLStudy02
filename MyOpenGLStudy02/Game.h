@@ -19,9 +19,15 @@ enum class GameState
 class Game
 {
 public:
+	static const glm::vec2 C_PlayerSize;
+	static const GLfloat C_PlayerVelocity;
+
+
 	Camera camera;
 	ResourceManager resourceManager;
 	SpriteRenderer* spriteRenderer;
+
+	GameObject* player;
 
 	//关卡相关
 	std::vector<GameLevel> levels;
@@ -38,10 +44,11 @@ public:
 	//初始化游戏状态（加载所有的着色器/纹理/关卡）
 	void Init();
 	//游戏循环
-	void ProcessInput(GLdouble dt);
-	void Update(GLdouble dt);
+	void ProcessInput(GLfloat dt);
+	void Update(GLfloat dt);
 	void Render();
 
 private:
+
 	void InitRes();
 };

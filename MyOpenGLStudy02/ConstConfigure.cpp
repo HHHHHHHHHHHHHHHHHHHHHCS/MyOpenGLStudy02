@@ -8,6 +8,8 @@ const std::string ConstConfigure::Image_BlockKey = "block";
 const std::string ConstConfigure::Image_BlockPath = "block.png";
 const std::string ConstConfigure::Image_BlockSolidKey = "blockSolid";
 const std::string ConstConfigure::Image_BlockSolidPath = "block_solid.png";
+const std::string ConstConfigure::Image_PaddleKey = "paddle";
+const std::string ConstConfigure::Image_PaddlePath = "paddle.png";
 
 //Shader
 const std::string ConstConfigure::Shader_Directory = "Shaders/";

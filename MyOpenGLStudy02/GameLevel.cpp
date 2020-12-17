@@ -85,7 +85,8 @@ void GameLevel::Init(const std::vector<std::vector<GLuint>>& tileData, GLuint le
 				continue;
 			}
 
-			glm::vec2 pos(unit_width * x, unit_height * y);
+			glm::vec2 pos(x * unit_width,
+			              2 * levelHeight - (unit_height * (y + 1)));
 			glm::vec3 color = glm::vec3(1.0f, 1.0f, 1.0f); //默认为白色
 			std::string texturePath;
 			GLboolean isSolid = GL_FALSE;

@@ -1,6 +1,8 @@
 #include "Game.h"
 
-#include <iostream>
+
+const glm::vec2 Game::C_PlayerSize(100, 20);
+const GLfloat Game::C_PlayerVelocity(500.0f);
 
 
 Game::Game(GLuint _width, GLuint _height)
@@ -28,6 +30,11 @@ void Game::Init()
 	spriteShader.Use().SetInteger("image", 0);
 	spriteShader.SetMatrix4x4("viewProjection", camera.GetViewProjection());
 	spriteRenderer = new SpriteRenderer(spriteShader);
+	glm::vec2 playerPos = glm::vec2(
+		this->width / 2 - C_PlayerSize.x / 2,
+		C_PlayerSize.y
+	);
+	player = new GameObject(playerPos, C_PlayerSize, resourceManager.GetTexture(ConstConfigure::Image_PaddleKey));
 }
 
 void Game::InitRes()
@@ -37,6 +44,8 @@ void Game::InitRes()
 	resourceManager.LoadTexture(ConstConfigure::Image_BackgroundKey, ConstConfigure::Image_BackgroundPath);
 	resourceManager.LoadTexture(ConstConfigure::Image_BlockKey, ConstConfigure::Image_BlockPath);
 	resourceManager.LoadTexture(ConstConfigure::Image_BlockSolidKey, ConstConfigure::Image_BlockSolidPath);
+	resourceManager.LoadTexture(ConstConfigure::Image_PaddleKey, ConstConfigure::Image_PaddlePath);
+
 
 	GameLevel one;
 	one.Load(ConstConfigure::Level_1Path, this->width, static_cast<GLuint>(this->height * 0.5));
@@ -53,11 +62,28 @@ void Game::InitRes()
 }
 
 
-void Game::ProcessInput(GLdouble dt)
+void Game::ProcessInput(GLfloat dt)
 {
+	//TODO:player可以做继承类
+	if (this->state == GameState::GAME_ACTIVE)
+	{
+		GLfloat velocity = 0;
+		if (this->keys[GLFW_KEY_A])
+		{
+			velocity -= C_PlayerVelocity * dt;
+		}
+		if (this->keys[GLFW_KEY_D])
+		{
+			velocity += C_PlayerVelocity * dt;
+		}
+		if (velocity != 0)
+		{
+			player->position.x = glm::clamp(player->position.x + velocity, 0.0f, width - player->size.x);
+		}
+	}
 }
 
-void Game::Update(GLdouble dt)
+void Game::Update(GLfloat dt)
 {
 }
 
@@ -69,5 +95,7 @@ void Game::Render()
 		                           , glm::vec2(0, 0), glm::vec2(this->width, this->height), 0);
 		//序号正常要-1
 		this->levels[this->level - 1].Draw(*spriteRenderer);
+
+		player->Draw(*spriteRenderer);
 	}
 }
