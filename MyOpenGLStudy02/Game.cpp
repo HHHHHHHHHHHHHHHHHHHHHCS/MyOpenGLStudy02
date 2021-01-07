@@ -1,8 +1,6 @@
 #include "Game.h"
 
-
-const glm::vec2 Game::C_PlayerSize(100, 20);
-const GLfloat Game::C_PlayerVelocity(500.0f);
+#include "PlayerObject.h"
 
 
 Game::Game(GLuint _width, GLuint _height)
@@ -30,11 +28,7 @@ void Game::Init()
 	spriteShader.Use().SetInteger("image", 0);
 	spriteShader.SetMatrix4x4("viewProjection", camera.GetViewProjection());
 	spriteRenderer = new SpriteRenderer(spriteShader);
-	glm::vec2 playerPos = glm::vec2(
-		this->width / 2 - C_PlayerSize.x / 2,
-		C_PlayerSize.y
-	);
-	player = new GameObject(playerPos, C_PlayerSize, resourceManager.GetTexture(ConstConfigure::Image_PaddleKey));
+	player = new PlayerObject(width, height, resourceManager.GetTexture(ConstConfigure::Image_PaddleKey));
 }
 
 void Game::InitRes()
@@ -70,15 +64,15 @@ void Game::ProcessInput(GLfloat dt)
 		GLfloat velocity = 0;
 		if (this->keys[GLFW_KEY_A])
 		{
-			velocity -= C_PlayerVelocity * dt;
+			velocity -=  dt;
 		}
 		if (this->keys[GLFW_KEY_D])
 		{
-			velocity += C_PlayerVelocity * dt;
+			velocity +=   dt;
 		}
 		if (velocity != 0)
 		{
-			player->position.x = glm::clamp(player->position.x + velocity, 0.0f, width - player->size.x);
+			player->Move(velocity);
 		}
 	}
 }

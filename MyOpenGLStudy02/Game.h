@@ -8,6 +8,8 @@
 #include "ResourceManager.h"
 #include "SpriteRenderer.h"
 
+class PlayerObject;
+
 //游戏的状态
 enum class GameState
 {
@@ -19,15 +21,11 @@ enum class GameState
 class Game
 {
 public:
-	static const glm::vec2 C_PlayerSize;
-	static const GLfloat C_PlayerVelocity;
-
-
 	Camera camera;
 	ResourceManager resourceManager;
 	SpriteRenderer* spriteRenderer;
 
-	GameObject* player;
+	PlayerObject* player;
 
 	//关卡相关
 	std::vector<GameLevel> levels;

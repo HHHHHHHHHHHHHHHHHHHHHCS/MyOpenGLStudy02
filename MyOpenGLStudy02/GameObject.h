@@ -26,5 +26,5 @@ public:
 	           const glm::vec3& _color = glm::vec3(1.0f)
 	           , const glm::vec2& _velocity = glm::vec2(0.0f, 0.0f));
 	//draw sprite
-	virtual void Draw( SpriteRenderer& renderer);
+	virtual void Draw(SpriteRenderer& renderer);
 };

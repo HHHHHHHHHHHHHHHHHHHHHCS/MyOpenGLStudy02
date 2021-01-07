@@ -160,6 +160,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BallObject.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="ConstConfigure.cpp" />
     <ClCompile Include="DebugLog.cpp" />
@@ -168,6 +169,7 @@
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="PlayerObject.cpp" />
     <ClCompile Include="Program.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="Shader.cpp" />
@@ -175,12 +177,14 @@
     <ClCompile Include="Texture2D.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BallObject.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="ConstConfigure.h" />
     <ClInclude Include="DebugLog.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameLevel.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="PlayerObject.h" />
     <ClInclude Include="Program.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="Shader.h" />
