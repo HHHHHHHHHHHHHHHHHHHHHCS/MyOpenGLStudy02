@@ -5,13 +5,18 @@
 class BallObject : public GameObject
 {
 public:
+	static const glm::vec2 C_BallVelocity;
+	static const GLfloat C_BallRadius;
+
+	
 	GLfloat radius;
 	GLboolean stuck;
+	glm::vec2 mapBorder;
 
 	BallObject();
-	BallObject(const GLfloat& width, const GLfloat& height, const glm::vec2& pos, const GLfloat& radius,
-	           const glm::vec2& velocity, const Texture2D& sprite);
+	BallObject(const glm::vec2& _mapSize, const glm::vec2& _pos, const GLfloat& _radius,
+	           const glm::vec2& _velocity, const Texture2D& _sprite);
 
 	glm::vec2 Move(const GLfloat& dt);
-	void Reset(const glm::vec2& position, const glm::vec2& velocity);
+	void Reset(const glm::vec2& _position, const glm::vec2& _velocity);
 };

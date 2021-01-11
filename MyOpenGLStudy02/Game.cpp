@@ -1,5 +1,7 @@
 #include "Game.h"
 
+
+#include "BallObject.h"
 #include "PlayerObject.h"
 
 
@@ -8,6 +10,7 @@ Game::Game(GLuint _width, GLuint _height)
 	memset(keys, 0, sizeof(keys));
 	width = _width;
 	height = _height;
+	mapSize = glm::vec2(_width, _height);
 	GLuint halfWidth = _width / 2;
 	GLuint halfHeight = _height / 2;
 
@@ -28,7 +31,12 @@ void Game::Init()
 	spriteShader.Use().SetInteger("image", 0);
 	spriteShader.SetMatrix4x4("viewProjection", camera.GetViewProjection());
 	spriteRenderer = new SpriteRenderer(spriteShader);
-	player = new PlayerObject(width, height, resourceManager.GetTexture(ConstConfigure::Image_PaddleKey));
+	player = new PlayerObject(mapSize, resourceManager.GetTexture(ConstConfigure::Image_PaddleKey));
+	//TODO:代码整理
+	const glm::vec2 ballPos = player->position + glm::vec2(player->size.x / 2 - BallObject::C_BallRadius,
+	                                                       2 * BallObject::C_BallRadius);
+	ball = new BallObject(mapSize, ballPos, BallObject::C_BallRadius, BallObject::C_BallVelocity,
+	                      resourceManager.GetTexture(ConstConfigure::Image_PaddleKey));
 }
 
 void Game::InitRes()
@@ -58,17 +66,16 @@ void Game::InitRes()
 
 void Game::ProcessInput(GLfloat dt)
 {
-	//TODO:player可以做继承类
 	if (this->state == GameState::GAME_ACTIVE)
 	{
 		GLfloat velocity = 0;
 		if (this->keys[GLFW_KEY_A])
 		{
-			velocity -=  dt;
+			velocity -= dt;
 		}
 		if (this->keys[GLFW_KEY_D])
 		{
-			velocity +=   dt;
+			velocity += dt;
 		}
 		if (velocity != 0)
 		{
@@ -91,5 +98,6 @@ void Game::Render()
 		this->levels[this->level - 1].Draw(*spriteRenderer);
 
 		player->Draw(*spriteRenderer);
+		ball->Draw(*spriteRenderer);
 	}
 }

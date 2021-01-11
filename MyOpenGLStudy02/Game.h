@@ -8,6 +8,7 @@
 #include "ResourceManager.h"
 #include "SpriteRenderer.h"
 
+class BallObject;
 class PlayerObject;
 
 //游戏的状态
@@ -26,6 +27,7 @@ public:
 	SpriteRenderer* spriteRenderer;
 
 	PlayerObject* player;
+	BallObject* ball;
 
 	//关卡相关
 	std::vector<GameLevel> levels;
@@ -35,8 +37,8 @@ public:
 	GameState state;
 	GLboolean keys[GLFW_KEY_LAST + 1];
 	GLuint width, height;
-
-
+	glm::vec2 mapSize;
+	
 	Game(GLuint _width, GLuint _height);
 	~Game();
 	//初始化游戏状态（加载所有的着色器/纹理/关卡）

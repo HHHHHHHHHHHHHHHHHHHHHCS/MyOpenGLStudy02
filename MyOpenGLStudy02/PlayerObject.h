@@ -10,7 +10,7 @@ public:
 	glm::vec2 mapBorder;
 	GLfloat velocity;
 
-	PlayerObject(const GLfloat& _width, const GLfloat& _height, const Texture2D& playerTexture);
+	PlayerObject(const glm::vec2& _mapSize, const Texture2D& playerTexture);
 
 	void Move(const GLfloat& dir);
 };
