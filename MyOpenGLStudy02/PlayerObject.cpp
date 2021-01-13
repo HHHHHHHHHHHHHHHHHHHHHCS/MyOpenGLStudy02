@@ -5,12 +5,19 @@ const GLfloat PlayerObject::C_PlayerVelocity(500.0f);
 
 PlayerObject::PlayerObject(const glm::vec2& _mapSize, const Texture2D& playerTexture)
 	: GameObject(glm::vec2(_mapSize.x / 2 - C_PlayerSize.x / 2, C_PlayerSize.y)
-	             , C_PlayerSize, playerTexture), mapBorder(_mapSize), velocity(C_PlayerVelocity)
+	             , C_PlayerSize, playerTexture), velocity(C_PlayerVelocity), mapSize(_mapSize)
 {
 }
 
 
-void PlayerObject::Move(const GLfloat& dir)
+PlayerObject::~PlayerObject()
 {
-	position.x = glm::clamp(position.x + velocity* dir, 0.0f, mapBorder.x - size.x);
+	//game = nullptr;
+}
+
+GLfloat PlayerObject::Move(const GLfloat& dir)
+{
+	const GLfloat oldX = position.x;
+	position.x = glm::clamp(position.x + velocity * dir, 0.0f, mapSize.x - size.x);
+	return position.x - oldX;
 }

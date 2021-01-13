@@ -3,7 +3,6 @@
 #include <vec2.hpp>
 #include <vec3.hpp>
 
-
 #include "SpriteRenderer.h"
 #include "Texture2D.h"
 
@@ -25,6 +24,7 @@ public:
 	GameObject(const glm::vec2& _pos, const glm::vec2& _size, const Texture2D& _sprite,
 	           const glm::vec3& _color = glm::vec3(1.0f)
 	           , const glm::vec2& _velocity = glm::vec2(0.0f, 0.0f));
+
 	//draw sprite
 	virtual void Draw(SpriteRenderer& renderer);
 };

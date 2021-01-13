@@ -14,6 +14,8 @@ public:
 	static const std::string Image_BlockSolidPath;
 	static const std::string Image_PaddleKey;
 	static const std::string Image_PaddlePath;
+	static const std::string Image_BallKey;
+	static const std::string Image_BallPath;
 
 	//Shader
 	static const std::string Shader_Directory;

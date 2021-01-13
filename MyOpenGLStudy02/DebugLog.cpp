@@ -2,6 +2,17 @@
 
 #include <iostream>
 
+
+void DebugLog::Print(GLfloat val)
+{
+	printf("%f  \n", val);
+}
+
+void DebugLog::Print(const glm::vec2& val)
+{
+	printf("x: %f , y: %f \n", val.x, val.y);
+}
+
 void DebugLog::Print(const glm::vec3& val)
 {
 	printf("x: %f , y: %f , z: %f \n", val.x, val.y, val.z);

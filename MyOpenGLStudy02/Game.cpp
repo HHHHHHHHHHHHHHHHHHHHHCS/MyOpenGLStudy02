@@ -32,11 +32,10 @@ void Game::Init()
 	spriteShader.SetMatrix4x4("viewProjection", camera.GetViewProjection());
 	spriteRenderer = new SpriteRenderer(spriteShader);
 	player = new PlayerObject(mapSize, resourceManager.GetTexture(ConstConfigure::Image_PaddleKey));
-	//TODO:´úÂëÕûÀí
 	const glm::vec2 ballPos = player->position + glm::vec2(player->size.x / 2 - BallObject::C_BallRadius,
 	                                                       2 * BallObject::C_BallRadius);
 	ball = new BallObject(mapSize, ballPos, BallObject::C_BallRadius, BallObject::C_BallVelocity,
-	                      resourceManager.GetTexture(ConstConfigure::Image_PaddleKey));
+	                      resourceManager.GetTexture(ConstConfigure::Image_BallKey));
 }
 
 void Game::InitRes()
@@ -47,7 +46,7 @@ void Game::InitRes()
 	resourceManager.LoadTexture(ConstConfigure::Image_BlockKey, ConstConfigure::Image_BlockPath);
 	resourceManager.LoadTexture(ConstConfigure::Image_BlockSolidKey, ConstConfigure::Image_BlockSolidPath);
 	resourceManager.LoadTexture(ConstConfigure::Image_PaddleKey, ConstConfigure::Image_PaddlePath);
-
+	resourceManager.LoadTexture(ConstConfigure::Image_BallKey, ConstConfigure::Image_BallPath);
 
 	GameLevel one;
 	one.Load(ConstConfigure::Level_1Path, this->width, static_cast<GLuint>(this->height * 0.5));
@@ -68,6 +67,7 @@ void Game::ProcessInput(GLfloat dt)
 {
 	if (this->state == GameState::GAME_ACTIVE)
 	{
+		GLfloat moveX = 0;
 		GLfloat velocity = 0;
 		if (this->keys[GLFW_KEY_A])
 		{
@@ -79,7 +79,19 @@ void Game::ProcessInput(GLfloat dt)
 		}
 		if (velocity != 0)
 		{
-			player->Move(velocity);
+			moveX = player->Move(velocity);
+		}
+		if (ball->stuck)
+		{
+			ball->position.x += moveX;
+		}
+		else
+		{
+			ball->Move(dt);
+		}
+		if (this->keys[GLFW_KEY_SPACE])
+		{
+			ball->stuck = false;
 		}
 	}
 }

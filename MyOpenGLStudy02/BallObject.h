@@ -8,10 +8,9 @@ public:
 	static const glm::vec2 C_BallVelocity;
 	static const GLfloat C_BallRadius;
 
-	
 	GLfloat radius;
 	GLboolean stuck;
-	glm::vec2 mapBorder;
+	glm::vec2 mapSize;
 
 	BallObject();
 	BallObject(const glm::vec2& _mapSize, const glm::vec2& _pos, const GLfloat& _radius,

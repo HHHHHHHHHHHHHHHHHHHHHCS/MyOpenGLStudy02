@@ -1,15 +1,15 @@
 ﻿#include "BallObject.h"
 
-#include "Game.h"
+#include "DebugLog.h"
 
-const glm::vec2 BallObject::C_BallVelocity(100.0f, -350.0f);
+const glm::vec2 BallObject::C_BallVelocity(100.0f, 350.0f);
 const GLfloat BallObject::C_BallRadius(12.5f);
 
 
 BallObject::BallObject(const glm::vec2& _mapSize, const glm::vec2& _pos, const GLfloat& _radius,
                        const glm::vec2& _velocity, const Texture2D& _sprite)
-	: GameObject(_pos, glm::vec2(_radius * 2, _radius * 2), _sprite)
-	  , radius(_radius), stuck(true), mapBorder(_mapSize)
+	: GameObject(_pos, glm::vec2(_radius * 2, _radius * 2), _sprite, glm::vec3(1.0f), _velocity)
+	  , radius(_radius), stuck(true), mapSize(_mapSize)
 {
 }
 
@@ -17,25 +17,30 @@ glm::vec2 BallObject::Move(const GLfloat& dt)
 {
 	if (!stuck)
 	{
-		position = velocity * dt;
-
+		position += velocity * dt;
 		if (position.x <= 0.0f)
 		{
 			velocity.x = -velocity.x;
 			position.x = 0.0f;
 		}
-		else if (position.x + size.x >= mapBorder.x)
+		else if (position.x + size.x >= mapSize.x)
 		{
 			velocity.x = -velocity.x;
-			position.x = mapBorder.x - size.x;
+			position.x = mapSize.x - size.x;
 		}
-		if (position.y + size.y >= mapBorder.y)
+		if (position.y + size.y >= mapSize.y)
 		{
 			velocity.y = -velocity.y;
-			position.y = mapBorder.y - size.y;
+			position.y = mapSize.y - size.y;
 		}
-		return position;
+		//TODO:DELETE
+		if (position.y <= 0)
+		{
+			velocity.y = -velocity.y;
+			position.y = 0;
+		}
 	}
+	return position;
 }
 
 
