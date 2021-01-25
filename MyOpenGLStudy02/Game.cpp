@@ -1,7 +1,8 @@
-#include "Game.h"
+ï»¿#include "Game.h"
 
 
 #include "BallObject.h"
+#include "DebugLog.h"
 #include "PlayerObject.h"
 
 
@@ -25,8 +26,8 @@ void Game::Init()
 {
 	InitRes();
 	state = GameState::GAME_ACTIVE;
-	//ÐòºÅÕý³£Òª-1
-	this->level = 2;
+	//æ•°ç»„ä»Ž0å¼€å§‹    å…³å¡çš„åå­—ä»Ž1å¼€å§‹
+	this->level = 0;
 	Shader spriteShader = resourceManager.GetShader(ConstConfigure::Shader_SpriteKey);
 	spriteShader.Use().SetInteger("image", 0);
 	spriteShader.SetMatrix4x4("viewProjection", camera.GetViewProjection());
@@ -85,10 +86,6 @@ void Game::ProcessInput(GLfloat dt)
 		{
 			ball->position.x += moveX;
 		}
-		else
-		{
-			ball->Move(dt);
-		}
 		if (this->keys[GLFW_KEY_SPACE])
 		{
 			ball->stuck = false;
@@ -98,6 +95,8 @@ void Game::ProcessInput(GLfloat dt)
 
 void Game::Update(GLfloat dt)
 {
+	ball->Move(dt);
+	this->DoCollisions();
 }
 
 void Game::Render()
@@ -106,10 +105,26 @@ void Game::Render()
 	{
 		spriteRenderer->DrawSprite(resourceManager.GetTexture(ConstConfigure::Image_BackgroundKey)
 		                           , glm::vec2(0, 0), glm::vec2(this->width, this->height), 0);
-		//ÐòºÅÕý³£Òª-1
-		this->levels[this->level - 1].Draw(*spriteRenderer);
+		this->levels[this->level].Draw(*spriteRenderer);
 
 		player->Draw(*spriteRenderer);
 		ball->Draw(*spriteRenderer);
+	}
+}
+
+void Game::DoCollisions()
+{
+	for (GameObject& tile : this->levels[this->level].bricks)
+	{
+		if (!tile.destroyed)
+		{
+			if (GameObject::CheckCollision(*ball, tile))
+			{
+				if (!tile.isSolid)
+				{
+					tile.destroyed = GL_TRUE;
+				}
+			}
+		}
 	}
 }

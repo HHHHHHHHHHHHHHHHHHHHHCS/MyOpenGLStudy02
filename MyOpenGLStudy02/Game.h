@@ -48,6 +48,8 @@ public:
 	void Update(GLfloat dt);
 	void Render();
 
+	void DoCollisions();
+
 private:
 
 	void InitRes();

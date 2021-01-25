@@ -2,6 +2,10 @@
 
 #include <iostream>
 
+void DebugLog::Print(std::string val)
+{
+	printf("%s  \n", val.c_str());
+}
 
 void DebugLog::Print(GLfloat val)
 {

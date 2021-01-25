@@ -122,6 +122,7 @@ void GameLevel::Init(const std::vector<std::vector<GLuint>>& tileData, GLuint le
 			GameObject obj = GameObject(pos, size
 			                            , Program::instance->game.resourceManager.GetTexture(texturePath)
 			                            , color);
+			obj.isSolid = isSolid;
 			this->bricks.emplace_back(obj);
 		}
 	}

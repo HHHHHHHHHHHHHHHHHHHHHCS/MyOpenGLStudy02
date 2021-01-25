@@ -1,4 +1,5 @@
 ﻿#pragma once
+#include <string>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <vec4.hpp>
@@ -7,7 +8,8 @@
 class DebugLog
 {
 public:
-	static void Print( GLfloat val);
+	static void Print(std::string val);
+	static void Print(GLfloat val);
 	static void Print(const glm::vec2& val);
 	static void Print(const glm::vec3& val);
 	static void Print(const glm::vec4& val);
