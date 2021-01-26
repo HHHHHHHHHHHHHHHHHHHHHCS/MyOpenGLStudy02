@@ -25,9 +25,6 @@ public:
 	           const glm::vec3& _color = glm::vec3(1.0f)
 	           , const glm::vec2& _velocity = glm::vec2(0.0f, 0.0f));
 
-	//检测碰撞
-	static GLboolean CheckCollision(GameObject& one, GameObject& two);
-	
 	//draw sprite
 	virtual void Draw(SpriteRenderer& renderer);
 

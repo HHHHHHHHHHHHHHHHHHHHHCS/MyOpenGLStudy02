@@ -15,17 +15,6 @@ GameObject::GameObject(const glm::vec2& _pos, const glm::vec2& _size, const Text
 {
 }
 
-GLboolean GameObject::CheckCollision(GameObject& one, GameObject& two)
-{
-	//x轴方向碰撞
-	const GLboolean collisionX = one.position.x + one.size.x >= two.position.x
-		&& two.position.x + two.size.x >= one.position.x;
-
-	const GLboolean collisionY = one.position.y + one.size.y >= two.position.y
-		&& two.position.y + two.size.y >= one.position.y;
-	return collisionX && collisionY;
-}
-
 void GameObject::Draw(SpriteRenderer& renderer)
 {
 	renderer.DrawSprite(this->sprite, this->position, this->size, this->rotation, this->color);

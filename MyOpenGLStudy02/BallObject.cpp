@@ -33,12 +33,12 @@ glm::vec2 BallObject::Move(const GLfloat& dt)
 			velocity.y = -velocity.y;
 			position.y = mapSize.y - size.y;
 		}
-		//TODO:DELETE
-		if (position.y <= 0)
-		{
-			velocity.y = -velocity.y;
-			position.y = 0;
-		}
+		// only test
+		// if (position.y <= 0)
+		// {
+		// 	velocity.y = -velocity.y;
+		// 	position.y = 0;
+		// }
 	}
 	return position;
 }

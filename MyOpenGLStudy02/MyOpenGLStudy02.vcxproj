@@ -119,6 +119,8 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>glfw3.lib;opengl32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>
+      </IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -162,6 +164,7 @@
   <ItemGroup>
     <ClCompile Include="BallObject.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Collider2D.cpp" />
     <ClCompile Include="ConstConfigure.cpp" />
     <ClCompile Include="DebugLog.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -172,6 +175,7 @@
     <ClCompile Include="PlayerObject.cpp" />
     <ClCompile Include="Program.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
+    <ClCompile Include="Rigibody2D.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="SpriteRenderer.cpp" />
     <ClCompile Include="Texture2D.cpp" />
@@ -179,6 +183,7 @@
   <ItemGroup>
     <ClInclude Include="BallObject.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Collider2D.h" />
     <ClInclude Include="ConstConfigure.h" />
     <ClInclude Include="DebugLog.h" />
     <ClInclude Include="Game.h" />
@@ -187,6 +192,7 @@
     <ClInclude Include="PlayerObject.h" />
     <ClInclude Include="Program.h" />
     <ClInclude Include="ResourceManager.h" />
+    <ClInclude Include="Rigibody2D.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="SpriteRenderer.h" />
     <ClInclude Include="stb_image.h" />

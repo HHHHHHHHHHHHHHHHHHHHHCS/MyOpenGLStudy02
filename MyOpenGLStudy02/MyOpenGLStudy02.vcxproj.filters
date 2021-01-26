@@ -60,6 +60,12 @@
     <ClCompile Include="BallObject.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Collider2D.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Rigibody2D.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -102,6 +108,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="BallObject.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Collider2D.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Rigibody2D.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

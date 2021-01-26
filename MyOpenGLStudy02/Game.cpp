@@ -2,6 +2,7 @@
 
 
 #include "BallObject.h"
+#include "Collider2D.h"
 #include "DebugLog.h"
 #include "PlayerObject.h"
 
@@ -118,13 +119,47 @@ void Game::DoCollisions()
 	{
 		if (!tile.destroyed)
 		{
-			if (GameObject::CheckCollision(*ball, tile))
+			CollisionInfo collisionInfo = Collider2D::CheckBallCollision(*ball, tile);
+			if (std::get<0>(collisionInfo))
 			{
 				if (!tile.isSolid)
 				{
 					tile.destroyed = GL_TRUE;
 				}
+				//碰撞处理
+				Rigibody2D::Direction dir = std::get<1>(collisionInfo);
+				glm::vec2 diff_vector = std::get<2>(collisionInfo);
+				if (dir == Rigibody2D::Direction::LEFT || dir == Rigibody2D::Direction::RIGHT)
+				{
+					ball->velocity.x = -ball->velocity.x; //反转水平速度
+					//重新定位  先找出内嵌多少距离
+					GLfloat penetration = ball->radius - std::abs(diff_vector.x);
+					if (dir == Rigibody2D::Direction::LEFT)
+					{
+						ball->position.x += penetration;
+					}
+					else
+					{
+						ball->position.x -= penetration;
+					}
+				}
+				else //垂直方向
+				{
+					ball->velocity.y = -ball->velocity.y; //反转垂直速度
+					//重新定位  先找出内嵌多少距离
+					GLfloat penetration = ball->radius - std::abs(diff_vector.y);
+					if (dir == Rigibody2D::Direction::UP)
+					{
+						ball->position.y += penetration;
+					}
+					else
+					{
+						ball->position.y -= penetration;
+					}
+				}
 			}
 		}
 	}
+	//TODO:
+	//CollisionInfo result = Collider2D::CheckBallCollision(*ball, *player);
 }
