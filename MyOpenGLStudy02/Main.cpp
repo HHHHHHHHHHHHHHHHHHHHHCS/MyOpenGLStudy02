@@ -1,4 +1,4 @@
-#define _CRTDBG_MAP_ALLOC
+ï»¿#define _CRTDBG_MAP_ALLOC
 #include <crtdbg.h>
 
 #include "Program.h"
@@ -14,10 +14,10 @@ int main(int argc, char* argv[])
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	_CrtDumpMemoryLeaks();
 
-	//µ¥¶ÀĞ´¸öº¯Êı½øĞĞ»ØÊÕ
+	//å•ç‹¬å†™ä¸ªå‡½æ•°è¿›è¡Œå›æ”¶
 	DoMain();
 	
-	//Õı³£1xx µÄĞ¹Â¶²»ÓÃ¹Ü
+	//æ­£å¸¸1xx çš„æ³„éœ²ä¸ç”¨ç®¡
 	_CrtDumpMemoryLeaks();
 	
 	return 0;
