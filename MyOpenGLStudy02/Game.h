@@ -48,9 +48,12 @@ public:
 	void Update(GLfloat dt);
 	void Render();
 
-	void DoCollisions();
+	void CheckCollisions();
+	void CheckFail();
 
 private:
 
 	void InitRes();
+	void ReLoadLevel(int _level);
+	void ResetPlayer();
 };

@@ -11,6 +11,10 @@
 //数字1：一个坚硬的砖块，不可被摧毁
 //大于1的数字：一个可被摧毁的砖块，不同的数字区分砖块的颜色
 
+GameLevel::GameLevel() = default;
+
+GameLevel::~GameLevel() = default;
+
 //从文件中加载关卡
 void GameLevel::Load(const std::string& file, GLuint levelWidth, GLuint levelHeight,
                      const std::string& directory)
@@ -19,7 +23,6 @@ void GameLevel::Load(const std::string& file, GLuint levelWidth, GLuint levelHei
 	this->bricks.clear();
 	//从文本中加载
 	GLuint tileCode;
-	GameLevel level;
 	std::string line;
 	std::ifstream fstream(directory + file);
 	std::vector<std::vector<GLuint>> tileData;
@@ -119,9 +122,9 @@ void GameLevel::Init(const std::vector<std::vector<GLuint>>& tileData, GLuint le
 				texturePath = ConstConfigure::Image_BlockKey;
 			}
 
-			GameObject obj = GameObject(pos, size
-			                            , Program::instance->game.resourceManager.GetTexture(texturePath)
-			                            , color);
+			GameObject obj(pos, size
+			               , Program::instance->game.resourceManager.GetTexture(texturePath)
+			               , color);
 			obj.isSolid = isSolid;
 			this->bricks.emplace_back(obj);
 		}

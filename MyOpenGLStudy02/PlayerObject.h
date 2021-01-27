@@ -12,8 +12,8 @@ public:
 	GLfloat velocity;
 	glm::vec2 mapSize;
 
-	PlayerObject(const glm::vec2& _mapSize, const Texture2D& playerTexture);
-	~PlayerObject();
-	
+	PlayerObject(const glm::vec2& _mapSize, Texture2D* playerTexture);
+
+	void ResetPos();
 	GLfloat Move(const GLfloat& dir);
 };

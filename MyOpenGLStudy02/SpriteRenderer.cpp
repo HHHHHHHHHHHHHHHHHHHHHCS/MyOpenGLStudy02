@@ -67,7 +67,7 @@ glm::mat4 SpriteRenderer::ModelMatrix(const glm::vec2& position
 	return model;
 }
 
-void SpriteRenderer::DrawSprite(const Texture2D& texture, const glm::vec2& position, const glm::vec2& size
+void SpriteRenderer::DrawSprite(Texture2D* texture, const glm::vec2& position, const glm::vec2& size
                                 , GLfloat rotate, const glm::vec3& color)
 {
 	this->shader.Use();
@@ -77,7 +77,7 @@ void SpriteRenderer::DrawSprite(const Texture2D& texture, const glm::vec2& posit
 	this->shader.SetMatrix4x4("model", model);
 	this->shader.SetVector3f("spriteColor", color);
 
-	texture.Bind(0);
+	texture->Bind(0);
 
 	glBindVertexArray(this->quadVAO);
 	glDrawArrays(GL_TRIANGLES, 0, 6);

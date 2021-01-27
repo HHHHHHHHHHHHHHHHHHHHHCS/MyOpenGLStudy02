@@ -18,14 +18,12 @@ public:
 	GLboolean isSolid; //是不是坚硬的 不可摧毁的
 	GLboolean destroyed = false;
 	//render state
-	Texture2D sprite;
+	Texture2D* sprite;
 	//constructor(s)
 	GameObject();
-	GameObject(const glm::vec2& _pos, const glm::vec2& _size, const Texture2D& _sprite,
+	GameObject(const glm::vec2& _pos, const glm::vec2& _size, Texture2D* _sprite,
 	           const glm::vec3& _color = glm::vec3(1.0f)
 	           , const glm::vec2& _velocity = glm::vec2(0.0f, 0.0f));
-
 	//draw sprite
 	virtual void Draw(SpriteRenderer& renderer);
-
 };

@@ -1,6 +1,5 @@
 ﻿#include "Game.h"
 
-
 #include "BallObject.h"
 #include "Collider2D.h"
 #include "DebugLog.h"
@@ -21,6 +20,9 @@ Game::Game(GLuint _width, GLuint _height)
 
 Game::~Game()
 {
+	delete spriteRenderer;
+	delete player;
+	delete ball;
 }
 
 void Game::Init()
@@ -35,7 +37,7 @@ void Game::Init()
 	spriteRenderer = new SpriteRenderer(spriteShader);
 	player = new PlayerObject(mapSize, resourceManager.GetTexture(ConstConfigure::Image_PaddleKey));
 	const glm::vec2 ballPos = player->position + glm::vec2(player->size.x / 2 - BallObject::C_BallRadius,
-	                                                       2 * BallObject::C_BallRadius);
+	                                                       PlayerObject::C_PlayerSize.y);
 	ball = new BallObject(mapSize, ballPos, BallObject::C_BallRadius, BallObject::C_BallVelocity,
 	                      resourceManager.GetTexture(ConstConfigure::Image_BallKey));
 }
@@ -51,17 +53,50 @@ void Game::InitRes()
 	resourceManager.LoadTexture(ConstConfigure::Image_BallKey, ConstConfigure::Image_BallPath);
 
 	GameLevel one;
-	one.Load(ConstConfigure::Level_1Path, this->width, static_cast<GLuint>(this->height * 0.5));
 	this->levels.emplace_back(one);
+	ReLoadLevel(0);
 	GameLevel two;
-	two.Load(ConstConfigure::Level_2Path, this->width, static_cast<GLuint>(this->height * 0.5));
 	this->levels.emplace_back(two);
+	ReLoadLevel(1);
 	GameLevel three;
-	three.Load(ConstConfigure::Level_3Path, this->width, static_cast<GLuint>(this->height * 0.5));
 	this->levels.emplace_back(three);
+	ReLoadLevel(2);
 	GameLevel four;
-	four.Load(ConstConfigure::Level_4Path, this->width, static_cast<GLuint>(this->height * 0.5));
 	this->levels.emplace_back(four);
+	ReLoadLevel(3);
+}
+
+void Game::ReLoadLevel(int _level)
+{
+	std::string path;
+	switch (_level)
+	{
+	case 0:
+		path = ConstConfigure::Level_1Path;
+		break;
+	case 1:
+		path = ConstConfigure::Level_2Path;
+		break;
+	case 2:
+		path = ConstConfigure::Level_3Path;
+		break;
+	case 3:
+		path = ConstConfigure::Level_4Path;
+		break;
+	default:
+		DebugLog::Print(_level + "is not find!");
+		return;
+	}
+
+	levels[_level].Load(path, this->width, static_cast<GLuint>(this->height * 0.5));
+}
+
+void Game::ResetPlayer()
+{
+	player->ResetPos();
+	const glm::vec2 ballPos = player->position + glm::vec2(player->size.x / 2 - BallObject::C_BallRadius,
+	                                                       PlayerObject::C_PlayerSize.y);
+	ball->Reset(ballPos, BallObject::C_BallVelocity);
 }
 
 
@@ -97,7 +132,8 @@ void Game::ProcessInput(GLfloat dt)
 void Game::Update(GLfloat dt)
 {
 	ball->Move(dt);
-	this->DoCollisions();
+	this->CheckCollisions();
+	CheckFail();
 }
 
 void Game::Render()
@@ -113,7 +149,7 @@ void Game::Render()
 	}
 }
 
-void Game::DoCollisions()
+void Game::CheckCollisions()
 {
 	for (GameObject& tile : this->levels[this->level].bricks)
 	{
@@ -150,16 +186,41 @@ void Game::DoCollisions()
 					GLfloat penetration = ball->radius - std::abs(diff_vector.y);
 					if (dir == Rigibody2D::Direction::UP)
 					{
-						ball->position.y += penetration;
+						ball->position.y -= penetration;
 					}
 					else
 					{
-						ball->position.y -= penetration;
+						ball->position.y += penetration;
 					}
 				}
 			}
 		}
 	}
-	//TODO:
-	//CollisionInfo result = Collider2D::CheckBallCollision(*ball, *player);
+	CollisionInfo result = Collider2D::CheckBallCollision(*ball, *player);
+	if (!ball->stuck && std::get<0>(result))
+	{
+		//检测碰到了挡板的哪个位置,并且根据碰到的那个位置来改变速度
+		const GLfloat centerBoard = player->position.x + player->size.x / 2;
+		const GLfloat distance = (ball->position.x + ball->radius) - centerBoard;
+		const GLfloat percentage = distance / (player->size.x / 2);
+		//根据结果来移动
+		const GLfloat strength = 2.0f;
+		const glm::vec2 oldVelocity = ball->velocity;
+		ball->velocity.x = BallObject::C_BallVelocity.x * percentage * strength;
+		//防止内嵌
+		ball->position.y = player->position.y + PlayerObject::C_PlayerSize.y;
+		//如果速度过快 则可能位于下方  所以需要绝对确保
+		ball->velocity.y = abs(ball->velocity.y);
+		//保持总速度不变
+		ball->velocity = glm::normalize(ball->velocity) * glm::length(oldVelocity);
+	}
+}
+
+void Game::CheckFail()
+{
+	if (ball->position.y <= 0)
+	{
+		ReLoadLevel(level);
+		ResetPlayer();
+	}
 }

@@ -11,9 +11,9 @@ class GameLevel
 public:
 	std::vector<GameObject> bricks;
 
-	GameLevel()
-	{
-	}
+	GameLevel();
+	~GameLevel();
+
 
 	//从文件中加载关卡
 	void Load(const std::string& file, GLuint levelWidth, GLuint levelHeight, const std::string& directory = ConstConfigure::Level_Directory);
