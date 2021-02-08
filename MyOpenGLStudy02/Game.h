@@ -5,6 +5,7 @@
 
 #include "Camera.h"
 #include "GameLevel.h"
+#include "Particle.h"
 #include "ResourceManager.h"
 #include "SpriteRenderer.h"
 
@@ -33,6 +34,7 @@ public:
 	std::vector<GameLevel> levels;
 	GLuint level;
 
+	
 	// 游戏状态
 	GameState state;
 	GLboolean keys[GLFW_KEY_LAST + 1];
@@ -50,6 +52,8 @@ public:
 
 	void CheckCollisions();
 	void CheckFail();
+	
+	void UpdateParticles();
 
 private:
 

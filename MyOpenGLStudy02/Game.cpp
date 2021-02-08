@@ -224,3 +224,4 @@ void Game::CheckFail()
 		ResetPlayer();
 	}
 }
+
