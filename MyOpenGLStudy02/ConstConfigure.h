@@ -16,11 +16,15 @@ public:
 	static const std::string Image_PaddlePath;
 	static const std::string Image_BallKey;
 	static const std::string Image_BallPath;
+	static const std::string Image_ParticleKey;
+	static const std::string Image_ParticlePath;
 
 	//Shader
 	static const std::string Shader_Directory;
 	static const std::string Shader_SpriteKey;
 	static const std::string Shader_SpritePath;
+	static const std::string Shader_ParticleKey;
+	static const std::string Shader_ParticlePath;
 
 	//Levels
 	static const std::string Level_Directory;

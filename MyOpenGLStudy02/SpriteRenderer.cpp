@@ -1,5 +1,7 @@
 ﻿#include "SpriteRenderer.h"
 
+#include "DebugLog.h"
+
 SpriteRenderer::SpriteRenderer(Shader& shader): isInit(false)
 {
 	this->shader = shader;
@@ -73,7 +75,7 @@ void SpriteRenderer::DrawSprite(Texture2D* texture, const glm::vec2& position, c
 	this->shader.Use();
 
 	const glm::mat4& model = ModelMatrix(position, size, rotate);
-
+	
 	this->shader.SetMatrix4x4("model", model);
 	this->shader.SetVector3f("spriteColor", color);
 

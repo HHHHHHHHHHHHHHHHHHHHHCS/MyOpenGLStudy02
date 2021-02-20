@@ -29,6 +29,7 @@ void Texture2D::Generate(GLuint width, GLuint height, unsigned char* data, GLboo
 
 void Texture2D::Bind() const
 {
+	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, this->ID);
 }
 

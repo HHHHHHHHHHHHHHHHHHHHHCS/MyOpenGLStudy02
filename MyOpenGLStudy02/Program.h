@@ -30,7 +30,7 @@ private:
 
 	bool Init(bool canResize = false, bool canDebug = true) ;
 	bool CreateWindow();
-	bool RegisterEvent() ;
+	bool RegisterEvent() const;
 	bool PreLoop();
 	bool DoLoop();
 	bool EndLoop();

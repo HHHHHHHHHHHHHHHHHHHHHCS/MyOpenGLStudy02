@@ -66,7 +66,7 @@ bool Program::CreateWindow()
 	return true;
 }
 
-bool Program::RegisterEvent()
+bool Program::RegisterEvent() const
 {
 	glfwSetKeyCallback(window, KeyCallBack);
 	glViewport(0, 0, screen_width, screen_height);

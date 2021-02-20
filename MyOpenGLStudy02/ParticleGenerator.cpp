@@ -2,6 +2,10 @@
 
 #include <ctime>
 
+#include "DebugLog.h"
+#include "Game.h"
+#include "Program.h"
+
 ParticleGenerator::ParticleGenerator(Shader shader, Texture2D* texture, GLuint amount)
 	: shader(shader), texture(texture), amount(amount), lastUsedParticle(0)
 {
@@ -14,20 +18,23 @@ void ParticleGenerator::Init()
 	GLfloat particleQuad[] =
 	{
 		0.0f, 1.0f, 0.0f, 1.0f,
-		1.0f, 0.0f, 1.0f, 0.0f,
 		0.0f, 0.0f, 0.0f, 0.0f,
+		1.0f, 0.0f, 1.0f, 0.0f,
 
 		0.0f, 1.0f, 0.0f, 1.0f,
+		1.0f, 0.0f, 1.0f, 0.0f,
 		1.0f, 1.0f, 1.0f, 1.0f,
-		1.0f, 0.0f, 1.0f, 0.0f
 	};
+	
 	glGenVertexArrays(1, &this->VAO);
 	GLuint VBO;
 	glGenBuffers(1, &VBO);
-	glBindVertexArray(this->VAO);
+
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(particleQuad), particleQuad, GL_STATIC_DRAW);
+
 	//set mesh attributes
+	glBindVertexArray(this->VAO);
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), reinterpret_cast<void*>(0));
 	glBindVertexArray(0);
@@ -38,7 +45,7 @@ void ParticleGenerator::Init()
 	}
 
 	//生成随机种子 用于位置和color
-	srand(time(nullptr));
+	srand(static_cast<unsigned>(time(nullptr)));
 }
 
 
@@ -47,19 +54,19 @@ void ParticleGenerator::Update(GLfloat dt, GameObject& object, GLuint newParticl
 	//add new particles
 	for (GLuint i = 0; i < newParticles; ++i)
 	{
-		int unusedParticle = this->FindUnusedParticle();
+		const int unusedParticle = this->FindUnusedParticle();
 		this->RespawnParticle(this->particles[unusedParticle], object, offset);
 	}
 
+
 	//update
-	for (GLuint i = 0; i < this->amount; ++i)
+	for (auto&& p : this->particles)
 	{
-		Particle& p = this->particles[i];
-		p.life -= dt;
-		if (p.life > 0.0f)
+		if (p.life > 0)
 		{
+			p.life -= dt;
 			p.position -= p.velocity * dt;
-			p.color.a -= dt * 2.5;
+			p.color.a -= dt * 2.5f;
 		}
 	}
 }
@@ -67,20 +74,32 @@ void ParticleGenerator::Update(GLfloat dt, GameObject& object, GLuint newParticl
 void ParticleGenerator::Draw()
 {
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+	
+	glBindVertexArray(this->VAO);
 
 	this->shader.Use();
-	for (Particle &particle : particles)
+	texture->Bind();
+
+	for (auto&& particle : particles)
 	{
 		if (particle.life > 0.0f)
 		{
-			texture->Bind();
-			glBindVertexArray(this->VAO);
+			glm::mat4 model{1};
+			model = glm::translate(model, glm::vec3(particle.position, 0));
+			model = glm::scale(model, glm::vec3(10.0f, 10.0f, 1.0f));
+
+			shader.SetMatrix4x4("model", model);
+			shader.SetVector4f("particleColor", particle.color);
+
 			glDrawArrays(GL_TRIANGLES, 0, 6);
-			glBindVertexArray(0);
-			//TODO:换成SpriteRender
+
+			//TODO:Draw instance or indirect
+			//TODO:RESET
+			//TODO:缩小减淡 淡出效果
 		}
 	}
 
+	glBindVertexArray(0);
 
 	//don't forget reset
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

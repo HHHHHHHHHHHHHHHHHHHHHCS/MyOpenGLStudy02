@@ -12,12 +12,15 @@ const std::string ConstConfigure::Image_PaddleKey = "paddle";
 const std::string ConstConfigure::Image_PaddlePath = "paddle.png";
 const std::string ConstConfigure::Image_BallKey = "ball";
 const std::string ConstConfigure::Image_BallPath = "ball.png";
+const std::string ConstConfigure::Image_ParticleKey = "particle";
+const std::string ConstConfigure::Image_ParticlePath = "particle.png";
 
 //Shader
 const std::string ConstConfigure::Shader_Directory = "Shaders/";
 const std::string ConstConfigure::Shader_SpriteKey = "sprite";
 const std::string ConstConfigure::Shader_SpritePath = "Sprite";
-
+const std::string ConstConfigure::Shader_ParticleKey = "particle";
+const std::string ConstConfigure::Shader_ParticlePath = "Particle";
 //Levels
 const std::string ConstConfigure::Level_Directory = "Levels/";
 // const std::string ConstConfigure::Level_1Key = "1";

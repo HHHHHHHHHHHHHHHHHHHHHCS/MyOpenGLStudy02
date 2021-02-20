@@ -4,6 +4,7 @@
 #include "Collider2D.h"
 #include "DebugLog.h"
 #include "PlayerObject.h"
+#include "Program.h"
 
 
 Game::Game(GLuint _width, GLuint _height)
@@ -23,6 +24,7 @@ Game::~Game()
 	delete spriteRenderer;
 	delete player;
 	delete ball;
+	delete particleGenerator;
 }
 
 void Game::Init()
@@ -40,17 +42,27 @@ void Game::Init()
 	                                                       PlayerObject::C_PlayerSize.y);
 	ball = new BallObject(mapSize, ballPos, BallObject::C_BallRadius, BallObject::C_BallVelocity,
 	                      resourceManager.GetTexture(ConstConfigure::Image_BallKey));
+
+	particleGenerator = new ParticleGenerator(
+		resourceManager.GetShader(ConstConfigure::Shader_ParticleKey)
+		, resourceManager.GetTexture(ConstConfigure::Image_ParticleKey), 500
+	);
+	particleGenerator->shader.Use();
+	particleGenerator->shader.SetMatrix4x4("viewProjection", camera.GetViewProjection());
 }
 
 void Game::InitRes()
 {
 	resourceManager.LoadShader(ConstConfigure::Shader_SpriteKey, ConstConfigure::Shader_SpritePath);
+	resourceManager.LoadShader(ConstConfigure::Shader_ParticleKey, ConstConfigure::Shader_ParticlePath);
+
 
 	resourceManager.LoadTexture(ConstConfigure::Image_BackgroundKey, ConstConfigure::Image_BackgroundPath);
 	resourceManager.LoadTexture(ConstConfigure::Image_BlockKey, ConstConfigure::Image_BlockPath);
 	resourceManager.LoadTexture(ConstConfigure::Image_BlockSolidKey, ConstConfigure::Image_BlockSolidPath);
 	resourceManager.LoadTexture(ConstConfigure::Image_PaddleKey, ConstConfigure::Image_PaddlePath);
 	resourceManager.LoadTexture(ConstConfigure::Image_BallKey, ConstConfigure::Image_BallPath);
+	resourceManager.LoadTexture(ConstConfigure::Image_ParticleKey, ConstConfigure::Image_ParticlePath);
 
 	GameLevel one;
 	this->levels.emplace_back(one);
@@ -91,7 +103,7 @@ void Game::ReLoadLevel(int _level)
 	levels[_level].Load(path, this->width, static_cast<GLuint>(this->height * 0.5));
 }
 
-void Game::ResetPlayer()
+void Game::ResetPlayer() const
 {
 	player->ResetPos();
 	const glm::vec2 ballPos = player->position + glm::vec2(player->size.x / 2 - BallObject::C_BallRadius,
@@ -132,6 +144,7 @@ void Game::ProcessInput(GLfloat dt)
 void Game::Update(GLfloat dt)
 {
 	ball->Move(dt);
+	particleGenerator->Update(dt, *ball, 2, glm::vec2(ball->radius / 2));
 	this->CheckCollisions();
 	CheckFail();
 }
@@ -143,8 +156,9 @@ void Game::Render()
 		spriteRenderer->DrawSprite(resourceManager.GetTexture(ConstConfigure::Image_BackgroundKey)
 		                           , glm::vec2(0, 0), glm::vec2(this->width, this->height), 0);
 		this->levels[this->level].Draw(*spriteRenderer);
-
+		
 		player->Draw(*spriteRenderer);
+		particleGenerator->Draw();
 		ball->Draw(*spriteRenderer);
 	}
 }
@@ -224,4 +238,3 @@ void Game::CheckFail()
 		ResetPlayer();
 	}
 }
-

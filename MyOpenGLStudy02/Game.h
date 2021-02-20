@@ -6,6 +6,7 @@
 #include "Camera.h"
 #include "GameLevel.h"
 #include "Particle.h"
+#include "ParticleGenerator.h"
 #include "ResourceManager.h"
 #include "SpriteRenderer.h"
 
@@ -26,7 +27,8 @@ public:
 	Camera camera;
 	ResourceManager resourceManager;
 	SpriteRenderer* spriteRenderer;
-
+	ParticleGenerator* particleGenerator;
+	
 	PlayerObject* player;
 	BallObject* ball;
 
@@ -59,5 +61,5 @@ private:
 
 	void InitRes();
 	void ReLoadLevel(int _level);
-	void ResetPlayer();
+	void ResetPlayer() const;
 };
