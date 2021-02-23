@@ -158,7 +158,10 @@ void Game::Render()
 		this->levels[this->level].Draw(*spriteRenderer);
 		
 		player->Draw(*spriteRenderer);
-		particleGenerator->Draw();
+		if(ball->stuck)
+		{
+			particleGenerator->Draw();
+		}
 		ball->Draw(*spriteRenderer);
 	}
 }
