@@ -1,5 +1,8 @@
 ﻿#include "Game.h"
 
+#include <iostream>
+
+
 #include "BallObject.h"
 #include "Collider2D.h"
 #include "DebugLog.h"
@@ -156,9 +159,9 @@ void Game::Render()
 		spriteRenderer->DrawSprite(resourceManager.GetTexture(ConstConfigure::Image_BackgroundKey)
 		                           , glm::vec2(0, 0), glm::vec2(this->width, this->height), 0);
 		this->levels[this->level].Draw(*spriteRenderer);
-		
+
 		player->Draw(*spriteRenderer);
-		if(ball->stuck)
+		if (!ball->stuck)
 		{
 			particleGenerator->Draw();
 		}

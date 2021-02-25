@@ -36,7 +36,7 @@ void ParticleGenerator::Init()
 	//set mesh attributes
 	glBindVertexArray(this->VAO);
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), reinterpret_cast<void*>(0));
+	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), reinterpret_cast<const void*>(0));
 	glBindVertexArray(0);
 
 	for (GLuint i = 0; i < this->amount; ++i)

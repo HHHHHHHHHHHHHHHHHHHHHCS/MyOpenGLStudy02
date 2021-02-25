@@ -23,6 +23,9 @@ public:
 	void SetVector4f(const GLchar* name, GLfloat x, GLfloat y, bool z, GLfloat w, GLboolean useShader = false);
 	void SetVector4f(const GLchar* name, const glm::vec4& value, bool useShader = false);
 	void SetMatrix4x4(const GLchar* name, const glm::mat4& matrix, bool useShader = false);
+	void SetVector1iArray(const GLchar* name, GLint length, const GLint* value, bool useShader = false);
+	void SetVector1fArray(const GLchar* name, GLint length, const GLfloat* value, bool useShader = false);
+	void SetVector2fArray(const GLchar* name, GLint length, const GLfloat* value, bool useShader = false);
 private:
 	//检查编译错误
 	void CheckCompileErrors(GLuint object, std::string type);

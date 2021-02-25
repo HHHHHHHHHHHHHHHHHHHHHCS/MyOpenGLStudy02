@@ -135,6 +135,33 @@ void Shader::SetMatrix4x4(const GLchar* name, const glm::mat4& matrix, bool useS
 	glUniformMatrix4fv(glGetUniformLocation(this->ID, name), 1,GL_FALSE, glm::value_ptr(matrix));
 }
 
+void Shader::SetVector1iArray(const GLchar* name, const GLint length, const GLint* value, bool useShader)
+{
+	if (useShader)
+	{
+		this->Use();
+	}
+	glUniform1iv(glGetUniformLocation(this->ID, name), length, value);
+}
+
+void Shader::SetVector1fArray(const GLchar* name, const GLint length, const GLfloat* value, bool useShader)
+{
+	if (useShader)
+	{
+		this->Use();
+	}
+	glUniform1fv(glGetUniformLocation(this->ID, name), length, value);
+}
+
+void Shader::SetVector2fArray(const GLchar* name,const GLint length, const GLfloat* value, bool useShader)
+{
+	if (useShader)
+	{
+		this->Use();
+	}
+	glUniform2fv(glGetUniformLocation(this->ID, name), length, value);
+}
+
 void Shader::CheckCompileErrors(GLuint object, std::string type)
 {
 	GLint success;
