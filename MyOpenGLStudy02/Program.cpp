@@ -75,19 +75,17 @@ bool Program::RegisterEvent() const
 
 bool Program::PreLoop()
 {
-	//因为这个游戏完全是2D的，所有顶点都有相同的z值，
-	//所以开启深度测试并没有什么用，反而可能造成深度冲突(Z-fighting)
-	//glEnable(GL_DEPTH_TEST);
-
 	glEnable(GL_CULL_FACE);
-	
+
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	glEnable(GL_DEPTH_TEST);
-	glDepthFunc(GL_LEQUAL);
+	//因为这个游戏完全是2D的，所有顶点都有相同的z值，
+	//所以开启深度测试并没有什么用，反而可能造成深度冲突(Z-fighting)
+	// glEnable(GL_DEPTH_TEST);
+	// glDepthFunc(GL_LEQUAL);
 
-	
+
 	game.Init();
 
 	deltaTime = 0.0f;
@@ -108,11 +106,6 @@ bool Program::DoLoop()
 
 		game.ProcessInput(deltaTime);
 		game.Update(deltaTime);
-
-		glClearColor(0.0f, 0.0f, 0.0f, 1.0);
-		glClearDepth(1.0);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 		game.Render();
 
 		glfwSwapBuffers(window);

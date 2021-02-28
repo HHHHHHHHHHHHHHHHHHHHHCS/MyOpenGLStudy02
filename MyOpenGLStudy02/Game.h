@@ -9,6 +9,7 @@
 #include "ParticleGenerator.h"
 #include "ResourceManager.h"
 #include "SpriteRenderer.h"
+#include "PostProcessor.h"
 
 class BallObject;
 class PlayerObject;
@@ -28,6 +29,7 @@ public:
 	ResourceManager resourceManager;
 	SpriteRenderer* spriteRenderer;
 	ParticleGenerator* particleGenerator;
+	PostProcessor* postProcessor;
 	
 	PlayerObject* player;
 	BallObject* ball;

@@ -24,6 +24,7 @@ Game::Game(GLuint _width, GLuint _height)
 
 Game::~Game()
 {
+	delete postProcessor;
 	delete spriteRenderer;
 	delete player;
 	delete ball;
@@ -36,6 +37,7 @@ void Game::Init()
 	state = GameState::GAME_ACTIVE;
 	//数组从0开始    关卡的名字从1开始
 	this->level = 0;
+	postProcessor = new PostProcessor{resourceManager.GetShader(ConstConfigure::Shader_PostProcessKey), width, height};
 	Shader spriteShader = resourceManager.GetShader(ConstConfigure::Shader_SpriteKey);
 	spriteShader.Use().SetInteger("image", 0);
 	spriteShader.SetMatrix4x4("viewProjection", camera.GetViewProjection());
@@ -56,9 +58,10 @@ void Game::Init()
 
 void Game::InitRes()
 {
+	//load 这一块其实可以放到json/xml 里面做
 	resourceManager.LoadShader(ConstConfigure::Shader_SpriteKey, ConstConfigure::Shader_SpritePath);
 	resourceManager.LoadShader(ConstConfigure::Shader_ParticleKey, ConstConfigure::Shader_ParticlePath);
-
+	resourceManager.LoadShader(ConstConfigure::Shader_PostProcessKey, ConstConfigure::Shader_PostProcessPath);
 
 	resourceManager.LoadTexture(ConstConfigure::Image_BackgroundKey, ConstConfigure::Image_BackgroundPath);
 	resourceManager.LoadTexture(ConstConfigure::Image_BlockKey, ConstConfigure::Image_BlockPath);
@@ -150,12 +153,21 @@ void Game::Update(GLfloat dt)
 	particleGenerator->Update(dt, *ball, 2, glm::vec2(ball->radius / 2));
 	this->CheckCollisions();
 	CheckFail();
+	postProcessor->Update(dt);
 }
 
 void Game::Render()
 {
-	if (this->state == GameState::GAME_ACTIVE)
+	if (this->state != GameState::GAME_ACTIVE)
 	{
+		glClearColor(0.0f, 0.0f, 0.0f, 1.0);
+		// glClearDepth(1.0);
+		glClear(GL_COLOR_BUFFER_BIT); //| GL_DEPTH_BUFFER_BIT);
+	}
+	else if (this->state == GameState::GAME_ACTIVE)
+	{
+		postProcessor->BeginRender();
+
 		spriteRenderer->DrawSprite(resourceManager.GetTexture(ConstConfigure::Image_BackgroundKey)
 		                           , glm::vec2(0, 0), glm::vec2(this->width, this->height), 0);
 		this->levels[this->level].Draw(*spriteRenderer);
@@ -166,6 +178,10 @@ void Game::Render()
 			particleGenerator->Draw();
 		}
 		ball->Draw(*spriteRenderer);
+
+		postProcessor->EndRender();
+
+		postProcessor->Render(glfwGetTime());
 	}
 }
 
@@ -182,9 +198,13 @@ void Game::CheckCollisions()
 				{
 					tile.destroyed = GL_TRUE;
 				}
+				else
+				{
+					postProcessor->DoShake(0.05f);
+				}
 				//碰撞处理
 				Rigibody2D::Direction dir = std::get<1>(collisionInfo);
-				glm::vec2 diff_vector = std::get<2>(collisionInfo);
+				const glm::vec2 diff_vector = std::get<2>(collisionInfo);
 				if (dir == Rigibody2D::Direction::LEFT || dir == Rigibody2D::Direction::RIGHT)
 				{
 					ball->velocity.x = -ball->velocity.x; //反转水平速度
@@ -203,7 +223,7 @@ void Game::CheckCollisions()
 				{
 					ball->velocity.y = -ball->velocity.y; //反转垂直速度
 					//重新定位  先找出内嵌多少距离
-					GLfloat penetration = ball->radius - std::abs(diff_vector.y);
+					const GLfloat penetration = ball->radius - std::abs(diff_vector.y);
 					if (dir == Rigibody2D::Direction::UP)
 					{
 						ball->position.y -= penetration;

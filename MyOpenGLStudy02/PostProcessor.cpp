@@ -35,6 +35,7 @@ PostProcessor::PostProcessor(Shader shader, GLuint width, GLuint height)
 	this->postProcessingShader.Use();
 	this->postProcessingShader.SetInteger("scene", 0);
 
+	/*
 	const GLfloat offset = 1.0f / 300.0f;
 	const GLfloat offsets[9][2] =
 	{
@@ -69,7 +70,9 @@ PostProcessor::PostProcessor(Shader shader, GLuint width, GLuint height)
 	};
 	this->postProcessingShader.SetVector1iArray("blur_kernel", sizeof(blur_kernel),
 	                                            reinterpret_cast<const GLint*>(blur_kernel));
+	*/
 }
+
 
 void PostProcessor::InitRenderData()
 {
@@ -78,8 +81,8 @@ void PostProcessor::InitRenderData()
 	const GLfloat vertices[] =
 	{
 		3.0f, -1.0f,
+		-1.0f, 3.0f,
 		-1.0f, -1.0f,
-		-1.0f, 3.0f
 	};
 
 	glGenVertexArrays(1, &this->VAO);
@@ -97,11 +100,52 @@ void PostProcessor::InitRenderData()
 }
 
 
-void PostProcessor::BeginRender()
+void PostProcessor::BeginRender() const
 {
-	//todo:
 	glBindFramebuffer(GL_FRAMEBUFFER, this->MSFBO);
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0);
-	glClearDepth(1.0);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	// glClearDepth(1.0);
+	glClear(GL_COLOR_BUFFER_BIT); //| GL_DEPTH_BUFFER_BIT);
+}
+
+
+void PostProcessor::EndRender() const
+{
+	glBindFramebuffer(GL_READ_FRAMEBUFFER, this->MSFBO);
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, this->FBO);
+	glBlitFramebuffer(0, 0, this->width, this->height, 0, 0, this->width, this->height, GL_COLOR_BUFFER_BIT,
+	                  GL_NEAREST);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+void PostProcessor::Render(GLfloat time)
+{
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	this->postProcessingShader.Use();
+	this->postProcessingShader.SetFloat("time", time);
+	this->postProcessingShader.SetInteger("confuse", this->confuse);
+	this->postProcessingShader.SetInteger("chaos", this->chaos);
+	this->postProcessingShader.SetInteger("shake", this->shake);
+	texture.Bind(0);
+	glBindVertexArray(this->VAO);
+	glDrawArrays(GL_TRIANGLES, 0, 3);
+	glBindVertexArray(0);
+}
+
+void PostProcessor::Update(GLfloat dt)
+{
+	if (shakeTimer > 0)
+	{
+		shakeTimer -= dt;
+		if (shakeTimer <= 0)
+		{
+			this->shake = false;
+		}
+	}
+}
+
+void PostProcessor::DoShake(GLfloat time)
+{
+	shake = true;
+	shakeTimer = time;
 }

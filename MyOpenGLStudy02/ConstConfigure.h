@@ -25,6 +25,8 @@ public:
 	static const std::string Shader_SpritePath;
 	static const std::string Shader_ParticleKey;
 	static const std::string Shader_ParticlePath;
+	static const std::string Shader_PostProcessKey;
+	static const std::string Shader_PostProcessPath;
 
 	//Levels
 	static const std::string Level_Directory;

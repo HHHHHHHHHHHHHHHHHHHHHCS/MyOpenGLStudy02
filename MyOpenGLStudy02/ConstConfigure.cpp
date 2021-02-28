@@ -21,6 +21,8 @@ const std::string ConstConfigure::Shader_SpriteKey = "sprite";
 const std::string ConstConfigure::Shader_SpritePath = "Sprite";
 const std::string ConstConfigure::Shader_ParticleKey = "particle";
 const std::string ConstConfigure::Shader_ParticlePath = "Particle";
+const std::string ConstConfigure::Shader_PostProcessKey = "PostProcess";
+const std::string ConstConfigure::Shader_PostProcessPath = "PostProcess";
 //Levels
 const std::string ConstConfigure::Level_Directory = "Levels/";
 // const std::string ConstConfigure::Level_1Key = "1";

@@ -11,13 +11,20 @@ public:
 	//反色翻转轴,边缘检测,晃动
 	GLboolean confuse, chaos, shake;
 
+	GLfloat shakeTimer = 0.0f;
+	
 	PostProcessor(Shader shader, GLuint width, GLuint height);
 
-	void BeginRender();
+	void Update(GLfloat dt);
+	
+	void BeginRender() const;
 
-	void EndRender();
+	void EndRender() const;
 
-	void Render();
+	void Render(GLfloat time);
+
+	void DoShake(GLfloat time);
+
 private:
 	GLuint MSFBO, FBO;
 	GLuint RBO;
