@@ -1,6 +1,6 @@
 ﻿#include "ConstConfigure.h"
 
-//Image
+//Image------------------
 const std::string ConstConfigure::Image_Directory = "Images/";
 const std::string ConstConfigure::Image_BackgroundKey = "background";
 const std::string ConstConfigure::Image_BackgroundPath = "background.jpg";
@@ -14,8 +14,21 @@ const std::string ConstConfigure::Image_BallKey = "ball";
 const std::string ConstConfigure::Image_BallPath = "ball.png";
 const std::string ConstConfigure::Image_ParticleKey = "particle";
 const std::string ConstConfigure::Image_ParticlePath = "particle.png";
+//powerup
+const std::string ConstConfigure::Image_SpeedKey = "speed";
+const std::string ConstConfigure::Image_SpeedPath = "powerup_speed.png";
+const std::string ConstConfigure::Image_StickyKey = "sticky";
+const std::string ConstConfigure::Image_StickyPath = "powerup_sticky.png";
+const std::string ConstConfigure::Image_PassKey = "pass";
+const std::string ConstConfigure::Image_PassPath = "powerup_passthrough.png";
+const std::string ConstConfigure::Image_PadKey = "pad";
+const std::string ConstConfigure::Image_PadPath = "powerup_increase.png";
+const std::string ConstConfigure::Image_ConfuseKey = "confuse";
+const std::string ConstConfigure::Image_ConfusePath = "powerup_confuse.png";
+const std::string ConstConfigure::Image_ChaosKey = "chaos";
+const std::string ConstConfigure::Image_ChaosPath = "powerup_chaos.png";
 
-//Shader
+//Shader-----------------------
 const std::string ConstConfigure::Shader_Directory = "Shaders/";
 const std::string ConstConfigure::Shader_SpriteKey = "sprite";
 const std::string ConstConfigure::Shader_SpritePath = "Sprite";
@@ -23,7 +36,8 @@ const std::string ConstConfigure::Shader_ParticleKey = "particle";
 const std::string ConstConfigure::Shader_ParticlePath = "Particle";
 const std::string ConstConfigure::Shader_PostProcessKey = "PostProcess";
 const std::string ConstConfigure::Shader_PostProcessPath = "PostProcess";
-//Levels
+
+//Levels-----------------------
 const std::string ConstConfigure::Level_Directory = "Levels/";
 // const std::string ConstConfigure::Level_1Key = "1";
 const std::string ConstConfigure::Level_1Path = "1.txt";

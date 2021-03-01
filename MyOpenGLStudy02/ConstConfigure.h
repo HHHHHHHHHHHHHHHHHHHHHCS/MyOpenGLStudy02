@@ -18,6 +18,18 @@ public:
 	static const std::string Image_BallPath;
 	static const std::string Image_ParticleKey;
 	static const std::string Image_ParticlePath;
+	static const std::string Image_SpeedKey;
+	static const std::string Image_SpeedPath;
+	static const std::string Image_StickyKey;
+	static const std::string Image_StickyPath;
+	static const std::string Image_PassKey;
+	static const std::string Image_PassPath;
+	static const std::string Image_PadKey;
+	static const std::string Image_PadPath;
+	static const std::string Image_ConfuseKey;
+	static const std::string Image_ConfusePath;
+	static const std::string Image_ChaosKey;
+	static const std::string Image_ChaosPath;
 
 	//Shader
 	static const std::string Shader_Directory;
