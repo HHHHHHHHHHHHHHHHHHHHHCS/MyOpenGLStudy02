@@ -7,10 +7,11 @@
 #include "Collider2D.h"
 #include "DebugLog.h"
 #include "PlayerObject.h"
+#include "PowerUp.h"
 #include "Program.h"
 
 
-Game::Game(GLuint _width, GLuint _height)
+Game::Game(GLuint _width, GLuint _height): resourceManager()
 {
 	memset(keys, 0, sizeof(keys));
 	width = _width;
@@ -36,7 +37,8 @@ void Game::Init()
 	InitRes();
 	state = GameState::GAME_ACTIVE;
 	//数组从0开始    关卡的名字从1开始
-	this->level = 0;
+	this->level = 1;
+	powerUpGenerator = new PowerUpGenerator{};
 	postProcessor = new PostProcessor{resourceManager.GetShader(ConstConfigure::Shader_PostProcessKey), width, height};
 	Shader spriteShader = resourceManager.GetShader(ConstConfigure::Shader_SpriteKey);
 	spriteShader.Use().SetInteger("image", 0);
@@ -115,6 +117,7 @@ void Game::ResetPlayer() const
 	const glm::vec2 ballPos = player->position + glm::vec2(player->size.x / 2 - BallObject::C_BallRadius,
 	                                                       PlayerObject::C_PlayerSize.y);
 	ball->Reset(ballPos, BallObject::C_BallVelocity);
+	powerUpGenerator->Reset();
 }
 
 
@@ -153,6 +156,7 @@ void Game::Update(GLfloat dt)
 	particleGenerator->Update(dt, *ball, 2, glm::vec2(ball->radius / 2));
 	this->CheckCollisions();
 	CheckFail();
+	powerUpGenerator->UpdatePowerUps(dt, this);
 	postProcessor->Update(dt);
 }
 
@@ -172,6 +176,8 @@ void Game::Render()
 		                           , glm::vec2(0, 0), glm::vec2(this->width, this->height), 0);
 		this->levels[this->level].Draw(*spriteRenderer);
 
+		this->powerUpGenerator->Draw(*spriteRenderer);
+
 		player->Draw(*spriteRenderer);
 		if (!ball->stuck)
 		{
@@ -181,7 +187,43 @@ void Game::Render()
 
 		postProcessor->EndRender();
 
-		postProcessor->Render(glfwGetTime());
+		postProcessor->Render(static_cast<GLfloat>(glfwGetTime()));
+	}
+}
+
+void Game::ActivatePowerUp(PowerUp& powerUp) const
+{
+	if (powerUp.itemType == PowerUp::ItemType::Speed)
+	{
+		ball->velocity *= 1.2;
+	}
+	else if (powerUp.itemType == PowerUp::ItemType::Sticky)
+	{
+		ball->sticky = true;
+		player->color = glm::vec3(1.0f, 0.5f, 1.0f);
+	}
+	else if (powerUp.itemType == PowerUp::ItemType::Pass)
+	{
+		ball->passThrough = true;
+		ball->color = glm::vec3(1.0f, 0.5f, 0.5f);
+	}
+	else if (powerUp.itemType == PowerUp::ItemType::Pad)
+	{
+		player->size.x += 50;
+	}
+	else if (powerUp.itemType == PowerUp::ItemType::Confuse)
+	{
+		if (!postProcessor->chaos)
+		{
+			postProcessor->confuse = true; // only activate if chaos wasn't already active
+		}
+	}
+	else if (powerUp.itemType == PowerUp::ItemType::Chaos)
+	{
+		if (!postProcessor->confuse)
+		{
+			postProcessor->chaos = true;
+		}
 	}
 }
 
@@ -197,40 +239,45 @@ void Game::CheckCollisions()
 				if (!tile.isSolid)
 				{
 					tile.destroyed = GL_TRUE;
+					powerUpGenerator->SpawnPowerUps(&resourceManager, tile);
 				}
 				else
 				{
 					postProcessor->DoShake(0.05f);
 				}
-				//碰撞处理
-				Rigibody2D::Direction dir = std::get<1>(collisionInfo);
-				const glm::vec2 diff_vector = std::get<2>(collisionInfo);
-				if (dir == Rigibody2D::Direction::LEFT || dir == Rigibody2D::Direction::RIGHT)
+
+				if (!(!tile.isSolid && ball->passThrough))
 				{
-					ball->velocity.x = -ball->velocity.x; //反转水平速度
-					//重新定位  先找出内嵌多少距离
-					GLfloat penetration = ball->radius - std::abs(diff_vector.x);
-					if (dir == Rigibody2D::Direction::LEFT)
+					//碰撞处理
+					Rigibody2D::Direction dir = std::get<1>(collisionInfo);
+					const glm::vec2 diff_vector = std::get<2>(collisionInfo);
+					if (dir == Rigibody2D::Direction::LEFT || dir == Rigibody2D::Direction::RIGHT)
 					{
-						ball->position.x += penetration;
+						ball->velocity.x = -ball->velocity.x; //反转水平速度
+						//重新定位  先找出内嵌多少距离
+						GLfloat penetration = ball->radius - std::abs(diff_vector.x);
+						if (dir == Rigibody2D::Direction::LEFT)
+						{
+							ball->position.x += penetration;
+						}
+						else
+						{
+							ball->position.x -= penetration;
+						}
 					}
-					else
+					else //垂直方向
 					{
-						ball->position.x -= penetration;
-					}
-				}
-				else //垂直方向
-				{
-					ball->velocity.y = -ball->velocity.y; //反转垂直速度
-					//重新定位  先找出内嵌多少距离
-					const GLfloat penetration = ball->radius - std::abs(diff_vector.y);
-					if (dir == Rigibody2D::Direction::UP)
-					{
-						ball->position.y -= penetration;
-					}
-					else
-					{
-						ball->position.y += penetration;
+						ball->velocity.y = -ball->velocity.y; //反转垂直速度
+						//重新定位  先找出内嵌多少距离
+						const GLfloat penetration = ball->radius - std::abs(diff_vector.y);
+						if (dir == Rigibody2D::Direction::UP)
+						{
+							ball->position.y -= penetration;
+						}
+						else
+						{
+							ball->position.y += penetration;
+						}
 					}
 				}
 			}
@@ -239,20 +286,29 @@ void Game::CheckCollisions()
 	CollisionInfo result = Collider2D::CheckBallCollision(*ball, *player);
 	if (!ball->stuck && std::get<0>(result))
 	{
-		//检测碰到了挡板的哪个位置,并且根据碰到的那个位置来改变速度
-		const GLfloat centerBoard = player->position.x + player->size.x / 2;
-		const GLfloat distance = (ball->position.x + ball->radius) - centerBoard;
-		const GLfloat percentage = distance / (player->size.x / 2);
-		//根据结果来移动
-		const GLfloat strength = 2.0f;
-		const glm::vec2 oldVelocity = ball->velocity;
-		ball->velocity.x = BallObject::C_BallVelocity.x * percentage * strength;
 		//防止内嵌
 		ball->position.y = player->position.y + PlayerObject::C_PlayerSize.y;
-		//如果速度过快 则可能位于下方  所以需要绝对确保
-		ball->velocity.y = abs(ball->velocity.y);
-		//保持总速度不变
-		ball->velocity = glm::normalize(ball->velocity) * glm::length(oldVelocity);
+
+		if (ball->sticky)
+		{
+			ball->stuck = true;
+			ball->velocity = ball->C_BallVelocity;
+		}
+		else
+		{
+			//检测碰到了挡板的哪个位置,并且根据碰到的那个位置来改变速度
+			const GLfloat centerBoard = player->position.x + player->size.x / 2;
+			const GLfloat distance = (ball->position.x + ball->radius) - centerBoard;
+			const GLfloat percentage = distance / (player->size.x / 2);
+			//根据结果来移动
+			const GLfloat strength = 2.0f;
+			const glm::vec2 oldVelocity = ball->velocity;
+			ball->velocity.x = BallObject::C_BallVelocity.x * percentage * strength;
+			//如果速度过快 则可能位于下方  所以需要绝对确保
+			ball->velocity.y = abs(ball->velocity.y);
+			//保持总速度不变
+			ball->velocity = glm::normalize(ball->velocity) * glm::length(oldVelocity);
+		}
 	}
 }
 
@@ -262,5 +318,6 @@ void Game::CheckFail()
 	{
 		ReLoadLevel(level);
 		ResetPlayer();
+		
 	}
 }

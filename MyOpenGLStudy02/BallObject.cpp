@@ -9,7 +9,7 @@ const GLfloat BallObject::C_BallRadius(12.5f);
 BallObject::BallObject(const glm::vec2& _mapSize, const glm::vec2& _pos, const GLfloat& _radius,
                        const glm::vec2& _velocity, Texture2D* _sprite)
 	: GameObject(_pos, glm::vec2(_radius * 2, _radius * 2), _sprite, glm::vec3(1.0f), _velocity)
-	  , radius(_radius), stuck(true), mapSize(_mapSize)
+	  , radius(_radius), stuck(true), sticky(false), passThrough(false), mapSize(_mapSize)
 {
 }
 

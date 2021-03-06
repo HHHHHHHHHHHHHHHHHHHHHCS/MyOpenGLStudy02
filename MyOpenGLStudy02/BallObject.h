@@ -10,6 +10,8 @@ public:
 
 	GLfloat radius;
 	GLboolean stuck;
+	GLboolean sticky;
+	GLboolean passThrough;
 	glm::vec2 mapSize;
 
 	BallObject();

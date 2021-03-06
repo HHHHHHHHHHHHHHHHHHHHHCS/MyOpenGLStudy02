@@ -7,12 +7,16 @@
 #include "GameLevel.h"
 #include "Particle.h"
 #include "ParticleGenerator.h"
+#include "PowerUpGenerator.h"
 #include "ResourceManager.h"
 #include "SpriteRenderer.h"
 #include "PostProcessor.h"
 
-class BallObject;
-class PlayerObject;
+#include "PlayerObject.h"
+#include "BallObject.h"
+#include "PowerUp.h"
+
+
 
 //游戏的状态
 enum class GameState
@@ -29,7 +33,9 @@ public:
 	ResourceManager resourceManager;
 	SpriteRenderer* spriteRenderer;
 	ParticleGenerator* particleGenerator;
+	PowerUpGenerator* powerUpGenerator;
 	PostProcessor* postProcessor;
+
 	
 	PlayerObject* player;
 	BallObject* ball;
@@ -54,7 +60,10 @@ public:
 	void Update(GLfloat dt);
 	void Render();
 
+	
+
 	void CheckCollisions();
+	void ActivatePowerUp(PowerUp& power) const;
 	void CheckFail();
 	
 	void UpdateParticles();

@@ -6,7 +6,7 @@
 class PowerUp : public GameObject
 {
 public:
-	enum ItemType
+	enum class ItemType
 	{
 		Speed,
 		Sticky,
