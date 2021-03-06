@@ -9,9 +9,11 @@ PlayerObject::PlayerObject(const glm::vec2& _mapSize,  Texture2D* playerTexture)
 {
 }
 
-void PlayerObject::ResetPos()
+void PlayerObject::Reset()
 {
+	size = C_PlayerSize;
 	position = glm::vec2(mapSize.x / 2 - C_PlayerSize.x / 2, C_PlayerSize.y);
+	color = glm::vec3(1.0f);
 }
 
 

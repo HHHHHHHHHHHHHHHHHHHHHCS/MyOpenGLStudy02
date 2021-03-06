@@ -19,5 +19,5 @@ public:
 	           const glm::vec2& _velocity, Texture2D* _sprite);
 
 	glm::vec2 Move(const GLfloat& dt);
-	void Reset(const glm::vec2& _position, const glm::vec2& _velocity);
+	void Reset(const glm::vec2& _playerPosition, const glm::vec2& _playerSize);
 };

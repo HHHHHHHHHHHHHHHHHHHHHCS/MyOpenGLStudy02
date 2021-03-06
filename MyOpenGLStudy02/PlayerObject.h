@@ -14,6 +14,6 @@ public:
 
 	PlayerObject(const glm::vec2& _mapSize, Texture2D* playerTexture);
 
-	void ResetPos();
+	void Reset();
 	GLfloat Move(const GLfloat& dir);
 };

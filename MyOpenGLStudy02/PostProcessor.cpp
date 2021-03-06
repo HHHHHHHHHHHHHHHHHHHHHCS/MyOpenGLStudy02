@@ -149,3 +149,11 @@ void PostProcessor::DoShake(GLfloat time)
 	shake = true;
 	shakeTimer = time;
 }
+
+void PostProcessor::Reset()
+{
+	confuse = false;
+	chaos = false;
+	shake = false;
+	shakeTimer = 0.0f;
+}

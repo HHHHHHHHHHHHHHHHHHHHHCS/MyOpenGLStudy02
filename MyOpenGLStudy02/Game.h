@@ -59,8 +59,8 @@ public:
 	void ProcessInput(GLfloat dt);
 	void Update(GLfloat dt);
 	void Render();
+	void StopPowerUp(PowerUp& powerUp) const;
 
-	
 
 	void CheckCollisions();
 	void ActivatePowerUp(PowerUp& power) const;

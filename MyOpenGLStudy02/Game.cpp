@@ -72,6 +72,14 @@ void Game::InitRes()
 	resourceManager.LoadTexture(ConstConfigure::Image_BallKey, ConstConfigure::Image_BallPath);
 	resourceManager.LoadTexture(ConstConfigure::Image_ParticleKey, ConstConfigure::Image_ParticlePath);
 
+	resourceManager.LoadTexture(ConstConfigure::Image_SpeedKey, ConstConfigure::Image_SpeedPath);
+	resourceManager.LoadTexture(ConstConfigure::Image_StickyKey, ConstConfigure::Image_StickyPath);
+	resourceManager.LoadTexture(ConstConfigure::Image_PassKey, ConstConfigure::Image_PassPath);
+	resourceManager.LoadTexture(ConstConfigure::Image_PadKey, ConstConfigure::Image_PadPath);
+	resourceManager.LoadTexture(ConstConfigure::Image_ConfuseKey, ConstConfigure::Image_ConfusePath);
+	resourceManager.LoadTexture(ConstConfigure::Image_ChaosKey, ConstConfigure::Image_ChaosPath);
+
+
 	GameLevel one;
 	this->levels.emplace_back(one);
 	ReLoadLevel(0);
@@ -113,10 +121,9 @@ void Game::ReLoadLevel(int _level)
 
 void Game::ResetPlayer() const
 {
-	player->ResetPos();
-	const glm::vec2 ballPos = player->position + glm::vec2(player->size.x / 2 - BallObject::C_BallRadius,
-	                                                       PlayerObject::C_PlayerSize.y);
-	ball->Reset(ballPos, BallObject::C_BallVelocity);
+	player->Reset();
+	ball->Reset(player->position, player->size);
+	postProcessor->Reset();
 	powerUpGenerator->Reset();
 }
 
@@ -193,37 +200,62 @@ void Game::Render()
 
 void Game::ActivatePowerUp(PowerUp& powerUp) const
 {
-	if (powerUp.itemType == PowerUp::ItemType::Speed)
+	auto itemType = powerUp.itemType;
+	
+	if (itemType == PowerUp::ItemType::Speed)
 	{
 		ball->velocity *= 1.2;
 	}
-	else if (powerUp.itemType == PowerUp::ItemType::Sticky)
+	else if (itemType == PowerUp::ItemType::Sticky)
 	{
 		ball->sticky = true;
 		player->color = glm::vec3(1.0f, 0.5f, 1.0f);
 	}
-	else if (powerUp.itemType == PowerUp::ItemType::Pass)
+	else if (itemType == PowerUp::ItemType::Pass)
 	{
 		ball->passThrough = true;
 		ball->color = glm::vec3(1.0f, 0.5f, 0.5f);
 	}
-	else if (powerUp.itemType == PowerUp::ItemType::Pad)
+	else if (itemType == PowerUp::ItemType::Pad)
 	{
 		player->size.x += 50;
 	}
-	else if (powerUp.itemType == PowerUp::ItemType::Confuse)
+	else if (itemType == PowerUp::ItemType::Confuse)
 	{
 		if (!postProcessor->chaos)
 		{
 			postProcessor->confuse = true; // only activate if chaos wasn't already active
 		}
 	}
-	else if (powerUp.itemType == PowerUp::ItemType::Chaos)
+	else if (itemType == PowerUp::ItemType::Chaos)
 	{
 		if (!postProcessor->confuse)
 		{
 			postProcessor->chaos = true;
 		}
+	}
+}
+
+
+void Game::StopPowerUp(PowerUp& powerUp) const
+{
+	if (powerUp.itemType == PowerUp::ItemType::Sticky)
+	{
+		ball->sticky = false;
+		player->color = glm::vec3(1.0f);
+	}
+	else if (powerUp.itemType == PowerUp::ItemType::Pass)
+	{
+		ball->passThrough = false;
+		ball->color = glm::vec3(1.0f);
+	}
+	else if (powerUp.itemType == PowerUp::ItemType::Confuse)
+	{
+		postProcessor->confuse = false; // only activate if chaos wasn't already active
+	}
+	else if (powerUp.itemType == PowerUp::ItemType::Chaos)
+	{
+		postProcessor->chaos = false;
 	}
 }
 
@@ -318,6 +350,5 @@ void Game::CheckFail()
 	{
 		ReLoadLevel(level);
 		ResetPlayer();
-		
 	}
 }

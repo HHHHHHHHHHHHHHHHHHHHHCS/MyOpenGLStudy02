@@ -24,6 +24,8 @@ public:
 	void Render(GLfloat time);
 
 	void DoShake(GLfloat time);
+	
+	void Reset();
 
 private:
 	GLuint MSFBO, FBO;

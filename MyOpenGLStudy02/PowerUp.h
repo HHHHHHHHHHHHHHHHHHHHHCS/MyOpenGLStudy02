@@ -18,8 +18,10 @@ public:
 
 	const static glm::vec2 C_Size;
 	const static glm::vec2 C_Velocity;
+	const static GLfloat C_UpTime;
 
 	ItemType itemType;
+	GLfloat upTimer;
 	GLfloat duration;
 	GLboolean activated;
 

@@ -12,11 +12,11 @@ void main()
 {
 	gl_Position=vec4(vertex.xy,0.,1.);
 	vec2 uv=(vertex.xy+1.)/2.;
+
 	if(chaos)
 	{
-		float strength=.3;
-		vec2 pos=uv*vec2(sin(time),cos(time))*strength;
-		TexCoords=pos;
+		const float strength=.3;
+		TexCoords=uv+strength*vec2(sin(time),cos(time));
 	}
 	else if(confuse)
 	{

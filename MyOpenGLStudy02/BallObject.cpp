@@ -44,9 +44,11 @@ glm::vec2 BallObject::Move(const GLfloat& dt)
 }
 
 
-void BallObject::Reset(const glm::vec2& _position, const glm::vec2& _velocity)
+void BallObject::Reset(const glm::vec2& _playerPosition, const glm::vec2& _playerSize)
 {
-	this->position = _position;
-	this->velocity = _velocity;
+	this->position = _playerPosition + glm::vec2(_playerSize.x / 2 - C_BallRadius, _playerSize.y);
+	this->velocity = C_BallVelocity;
 	this->stuck = true;
+	this->sticky = false;
+	this->color = glm::vec3(1.0f);
 }

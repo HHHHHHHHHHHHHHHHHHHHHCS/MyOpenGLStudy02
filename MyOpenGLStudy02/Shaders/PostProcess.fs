@@ -12,8 +12,8 @@ uniform float time;
 // uniform int edge_kernel[9];
 // uniform float blur_kernel[9];
 
-float offset=1./300.;
-vec2 offsets[9]={
+const float offset=1./300.;
+const vec2 offsets[9]={
 	{-offset,offset},// top-left
 	{0.f,offset},// top-center
 	{offset,offset},// top-right
@@ -25,13 +25,13 @@ vec2 offsets[9]={
 	{offset,-offset}// bottom-right
 };
 
-int edge_kernel[9]={
+const int edge_kernel[9]={
 	-1,-1,-1,
 	-1,8,-1,
 	-1,-1,-1
 };
 
-float blur_kernel[9]=
+const float blur_kernel[9]=
 {
 	1./16,2./16,1./16,
 	2./16,4./16,2./16,
@@ -43,6 +43,7 @@ float blur_kernel[9]=
 void main()
 {
 	color=vec4(0.f,0.f,0.f,1.f);
+
 	vec3 sampleColor[9];
 	
 	if(chaos||shake)
