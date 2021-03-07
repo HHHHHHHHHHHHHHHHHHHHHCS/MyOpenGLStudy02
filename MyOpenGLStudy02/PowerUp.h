@@ -27,4 +27,7 @@ public:
 
 	PowerUp(ItemType _itemType, glm::vec3 _color, GLfloat _duration,
 	        glm::vec2 _position, Texture2D* _texture);
+
+	bool operator ==(const PowerUp& other);
+	bool operator !=(const PowerUp& other);
 };

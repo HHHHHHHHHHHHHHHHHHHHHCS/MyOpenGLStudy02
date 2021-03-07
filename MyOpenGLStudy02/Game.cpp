@@ -201,7 +201,7 @@ void Game::Render()
 void Game::ActivatePowerUp(PowerUp& powerUp) const
 {
 	auto itemType = powerUp.itemType;
-	
+
 	if (itemType == PowerUp::ItemType::Speed)
 	{
 		ball->velocity *= 1.2;
