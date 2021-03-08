@@ -11,10 +11,13 @@
 #include "ResourceManager.h"
 #include "SpriteRenderer.h"
 #include "PostProcessor.h"
+#include "irrKlang.h"
+
 
 #include "PlayerObject.h"
 #include "BallObject.h"
 #include "PowerUp.h"
+
 
 
 
@@ -35,6 +38,7 @@ public:
 	ParticleGenerator* particleGenerator;
 	PowerUpGenerator* powerUpGenerator;
 	PostProcessor* postProcessor;
+	irrklang::ISoundEngine* soundEngine;
 
 	
 	PlayerObject* player;

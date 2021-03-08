@@ -1,8 +1,5 @@
 ﻿#include "Game.h"
 
-#include <iostream>
-
-
 #include "BallObject.h"
 #include "Collider2D.h"
 #include "DebugLog.h"
@@ -39,6 +36,8 @@ void Game::Init()
 	//数组从0开始    关卡的名字从1开始
 	this->level = 1;
 	powerUpGenerator = new PowerUpGenerator{};
+	soundEngine = irrklang::createIrrKlangDevice();
+	soundEngine->play2D("Audios/breakout.mp3", GL_TRUE);
 	postProcessor = new PostProcessor{resourceManager.GetShader(ConstConfigure::Shader_PostProcessKey), width, height};
 	Shader spriteShader = resourceManager.GetShader(ConstConfigure::Shader_SpriteKey);
 	spriteShader.Use().SetInteger("image", 0);
