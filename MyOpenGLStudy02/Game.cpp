@@ -14,8 +14,8 @@ Game::Game(GLuint _width, GLuint _height): resourceManager()
 	width = _width;
 	height = _height;
 	mapSize = glm::vec2(_width, _height);
-	GLuint halfWidth = _width / 2;
-	GLuint halfHeight = _height / 2;
+	const GLuint halfWidth = _width / 2;
+	const GLuint halfHeight = _height / 2;
 
 	camera.Init(glm::vec3(halfWidth, halfHeight, 0), glm::vec3(0, 0, 0), glm::vec3(halfWidth, halfHeight, 1));
 }
@@ -27,6 +27,8 @@ Game::~Game()
 	delete player;
 	delete ball;
 	delete particleGenerator;
+	soundEngine->drop(); //已经delete了
+	soundEngine = nullptr;
 }
 
 void Game::Init()
@@ -37,7 +39,7 @@ void Game::Init()
 	this->level = 1;
 	powerUpGenerator = new PowerUpGenerator{};
 	soundEngine = irrklang::createIrrKlangDevice();
-	soundEngine->play2D("Audios/breakout.mp3", GL_TRUE);
+	soundEngine->play2D(ConstConfigure::Audio_BreakoutPath.c_str(), GL_TRUE);
 	postProcessor = new PostProcessor{resourceManager.GetShader(ConstConfigure::Shader_PostProcessKey), width, height};
 	Shader spriteShader = resourceManager.GetShader(ConstConfigure::Shader_SpriteKey);
 	spriteShader.Use().SetInteger("image", 0);
@@ -199,7 +201,8 @@ void Game::Render()
 
 void Game::ActivatePowerUp(PowerUp& powerUp) const
 {
-	auto itemType = powerUp.itemType;
+	soundEngine->play2D(ConstConfigure::Audio_BreakoutPath.c_str());
+	const auto itemType = powerUp.itemType;
 
 	if (itemType == PowerUp::ItemType::Speed)
 	{
@@ -270,10 +273,12 @@ void Game::CheckCollisions()
 				if (!tile.isSolid)
 				{
 					tile.destroyed = GL_TRUE;
+					soundEngine->play2D(ConstConfigure::Audio_BleepMp3Path.c_str());
 					powerUpGenerator->SpawnPowerUps(&resourceManager, tile);
 				}
 				else
 				{
+					soundEngine->play2D(ConstConfigure::Audio_SolidPath.c_str());
 					postProcessor->DoShake(0.05f);
 				}
 
@@ -286,7 +291,7 @@ void Game::CheckCollisions()
 					{
 						ball->velocity.x = -ball->velocity.x; //反转水平速度
 						//重新定位  先找出内嵌多少距离
-						GLfloat penetration = ball->radius - std::abs(diff_vector.x);
+						const GLfloat penetration = ball->radius - std::abs(diff_vector.x);
 						if (dir == Rigibody2D::Direction::LEFT)
 						{
 							ball->position.x += penetration;
@@ -317,6 +322,8 @@ void Game::CheckCollisions()
 	CollisionInfo result = Collider2D::CheckBallCollision(*ball, *player);
 	if (!ball->stuck && std::get<0>(result))
 	{
+		soundEngine->play2D(ConstConfigure::Audio_BleepWavPath.c_str());
+
 		//防止内嵌
 		ball->position.y = player->position.y + PlayerObject::C_PlayerSize.y;
 

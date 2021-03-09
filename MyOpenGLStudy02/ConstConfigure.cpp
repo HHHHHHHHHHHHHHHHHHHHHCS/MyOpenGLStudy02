@@ -47,3 +47,13 @@ const std::string ConstConfigure::Level_2Path = "2.txt";
 const std::string ConstConfigure::Level_3Path = "3.txt";
 // const std::string ConstConfigure::Level_4Key = "4";
 const std::string ConstConfigure::Level_4Path = "4.txt";
+
+//Audios------------------
+const std::string ConstConfigure::Audio_Directory = "Audios/";
+const std::string ConstConfigure::Audio_BleepMp3Path = Audio_Directory+"bleep.mp3";
+const std::string ConstConfigure::Audio_BleepWavPath = Audio_Directory + "bleep.wav";
+const std::string ConstConfigure::Audio_BreakoutPath = Audio_Directory + "breakout.mp3";
+const std::string ConstConfigure::Audio_PowerUpPath = Audio_Directory + "powerup.wav";
+const std::string ConstConfigure::Audio_SolidPath = Audio_Directory + "solid.wav";
+
+

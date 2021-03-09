@@ -40,7 +40,7 @@ public:
 	static const std::string Shader_PostProcessKey;
 	static const std::string Shader_PostProcessPath;
 
-	//Levels
+	//Audios
 	static const std::string Level_Directory;
 	static const std::string Level_1Key;
 	static const std::string Level_1Path;
@@ -50,4 +50,13 @@ public:
 	static const std::string Level_3Path;
 	static const std::string Level_4Key;
 	static const std::string Level_4Path;
+
+	//Levels
+	static const std::string Audio_Directory;
+	static const std::string Audio_BleepMp3Path;
+	static const std::string Audio_BleepWavPath;
+	static const std::string Audio_BreakoutPath;
+	static const std::string Audio_PowerUpPath;
+	static const std::string Audio_SolidPath;
+	static const std::string Audio_BleepPath;
 };
