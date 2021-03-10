@@ -18,7 +18,7 @@ public:
 	std::map<char, Character> characters;
 	Shader TextShader;
 
-	TextRenderer(unsigned int width, unsigned int height);
+	TextRenderer(unsigned int width, unsigned int height, Shader textShader);
 	void Load(std::string font, unsigned int fontSize);
 	void RenderText(std::string text, float x, float y, float scale, glm::vec3 color = glm::vec3(1.0f));
 
