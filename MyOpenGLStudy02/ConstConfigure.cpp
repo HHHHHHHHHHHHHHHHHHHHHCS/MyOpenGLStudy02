@@ -36,6 +36,8 @@ const std::string ConstConfigure::Shader_ParticleKey = "particle";
 const std::string ConstConfigure::Shader_ParticlePath = "Particle";
 const std::string ConstConfigure::Shader_PostProcessKey = "PostProcess";
 const std::string ConstConfigure::Shader_PostProcessPath = "PostProcess";
+const std::string ConstConfigure::Shader_TextKey = "Text";
+const std::string ConstConfigure::Shader_TextPath = "Text";
 
 //Levels-----------------------
 const std::string ConstConfigure::Level_Directory = "Levels/";
@@ -55,5 +57,9 @@ const std::string ConstConfigure::Audio_BleepWavPath = Audio_Directory + "bleep.
 const std::string ConstConfigure::Audio_BreakoutPath = Audio_Directory + "breakout.mp3";
 const std::string ConstConfigure::Audio_PowerUpPath = Audio_Directory + "powerup.wav";
 const std::string ConstConfigure::Audio_SolidPath = Audio_Directory + "solid.wav";
+
+//Fonts------------------
+const std::string ConstConfigure::Font_Directory = "Fonts/";
+const std::string ConstConfigure::Font_OcraextPath = Font_Directory + "OCR_A_Extended.ttf";
 
 

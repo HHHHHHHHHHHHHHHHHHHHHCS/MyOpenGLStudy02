@@ -16,11 +16,11 @@ class TextRenderer
 {
 public:
 	std::map<char, Character> characters;
-	Shader TextShader;
+	Shader textShader;
 
 	TextRenderer(unsigned int width, unsigned int height, Shader textShader);
 	void Load(std::string font, unsigned int fontSize);
-	void RenderText(std::string text, float x, float y, float scale, glm::vec3 color = glm::vec3(1.0f));
+	void RenderText(std::string text, float x, float y, float scale, glm::vec4 color = glm::vec4(1.0f));
 
 private:
 	unsigned int VAO, VBO;

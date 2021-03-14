@@ -10,7 +10,7 @@
 class ParticleGenerator
 {
 public:
-	ParticleGenerator(Shader shader, Texture2D* texture, GLuint amount);
+	ParticleGenerator(Shader shader,glm::mat4 vpMat4, Texture2D* texture, GLuint amount);
 
 	Shader shader;
 	
@@ -18,6 +18,8 @@ public:
 	void Update(GLfloat dt, GameObject& object, GLuint newParticles, glm::vec2 offset = glm::vec2(0.0f, 0.0f));
 	//render
 	void Draw();
+	//reset
+	void Reset();
 private:
 	std::vector<Particle> particles;
 	Texture2D* texture;

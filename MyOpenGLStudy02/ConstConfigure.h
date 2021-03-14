@@ -39,6 +39,8 @@ public:
 	static const std::string Shader_ParticlePath;
 	static const std::string Shader_PostProcessKey;
 	static const std::string Shader_PostProcessPath;
+	static const std::string Shader_TextKey;
+	static const std::string Shader_TextPath;
 
 	//Audios
 	static const std::string Level_Directory;
@@ -59,4 +61,8 @@ public:
 	static const std::string Audio_PowerUpPath;
 	static const std::string Audio_SolidPath;
 	static const std::string Audio_BleepPath;
+
+	//Fonts
+	static const std::string Font_Directory;
+	static const std::string Font_OcraextPath;
 };

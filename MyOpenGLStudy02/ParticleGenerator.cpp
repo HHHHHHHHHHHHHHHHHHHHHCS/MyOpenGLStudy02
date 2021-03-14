@@ -6,10 +6,12 @@
 #include "Game.h"
 #include "Program.h"
 
-ParticleGenerator::ParticleGenerator(Shader shader, Texture2D* texture, GLuint amount)
+ParticleGenerator::ParticleGenerator(Shader shader,glm::mat4 vpMat4, Texture2D* texture, GLuint amount)
 	: shader(shader), texture(texture), amount(amount), lastUsedParticle(0)
 {
 	this->Init();
+	shader.Use();
+	shader.SetMatrix4x4("viewProjection", vpMat4);
 }
 
 
@@ -94,8 +96,6 @@ void ParticleGenerator::Draw()
 			glDrawArrays(GL_TRIANGLES, 0, 6);
 
 			//TODO:Draw instance or indirect
-			//TODO:RESET
-			//TODO:缩小减淡 淡出效果
 		}
 	}
 
@@ -144,3 +144,13 @@ void ParticleGenerator::RespawnParticle(Particle& particle, GameObject& object, 
 	particle.life = 1.0f;
 	particle.velocity = object.velocity * 0.1f;
 }
+
+void ParticleGenerator::Reset()
+{
+	for (auto&& particle : particles)
+	{
+		particle.life = 0.0f;
+		lastUsedParticle = 0;
+	}
+}
+ 

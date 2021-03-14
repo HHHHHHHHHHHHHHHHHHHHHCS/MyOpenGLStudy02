@@ -2,7 +2,6 @@
 
 #include <vector>
 
-
 #include "ConstConfigure.h"
 #include "GameObject.h"
 
@@ -11,6 +10,8 @@ class GameLevel
 public:
 	std::vector<GameObject> bricks;
 
+	unsigned int breakCount = 0;
+	
 	GameLevel();
 	~GameLevel();
 

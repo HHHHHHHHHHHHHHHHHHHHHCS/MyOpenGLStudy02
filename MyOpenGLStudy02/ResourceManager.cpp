@@ -44,12 +44,12 @@ Texture2D* ResourceManager::GetTexture(const std::string& name)
 
 void ResourceManager::Clear()
 {
-	for (auto iter : shaders)
+	for (auto&& iter : shaders)
 	{
 		glDeleteProgram(iter.second.ID);
 	}
 
-	for (auto iter : textures)
+	for (auto&& iter : textures)
 	{
 		glDeleteTextures(1, &iter.second.ID);
 	}

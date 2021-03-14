@@ -5,6 +5,8 @@
 #include <iostream>
 #include <thread>
 
+#include "DebugLog.h"
+
 Program* Program::instance = nullptr;
 
 Program::~Program()
@@ -75,7 +77,7 @@ bool Program::RegisterEvent() const
 
 bool Program::PreLoop()
 {
-	glEnable(GL_CULL_FACE);
+	// glEnable(GL_CULL_FACE);
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -163,13 +165,9 @@ void Program::FrameBufferSizeCallback(GLFWwindow* window, int width, int height)
 
 void Program::KeyCallBack(GLFWwindow* window, int key, int scanCode, int action, int mode)
 {
+	//因为这个的检测间隔过长 , 所以用自己写的
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-		glfwSetWindowShouldClose(window, GL_TRUE);
-	if (key >= 0 && key < 1024)
 	{
-		if (action == GLFW_PRESS)
-			instance->game.keys[key] = GL_TRUE;
-		else if (action == GLFW_RELEASE)
-			instance->game.keys[key] = GL_FALSE;
+		glfwSetWindowShouldClose(window, GL_TRUE);
 	}
 }

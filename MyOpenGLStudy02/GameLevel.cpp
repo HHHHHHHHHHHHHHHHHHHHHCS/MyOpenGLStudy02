@@ -75,7 +75,7 @@ void GameLevel::Init(const std::vector<std::vector<GLuint>>& tileData, GLuint le
 	GLfloat unit_height = levelHeight / static_cast<GLfloat>(height);
 
 	glm::vec2 size(unit_width, unit_height);
-
+	breakCount = 0;
 
 	for (GLuint y = 0; y < height; ++y)
 	{
@@ -102,6 +102,7 @@ void GameLevel::Init(const std::vector<std::vector<GLuint>>& tileData, GLuint le
 			}
 			else if (val > 1)
 			{
+				breakCount++;
 				if (val == 2)
 				{
 					color = glm::vec3(0.2f, 0.6f, 1.0f);
