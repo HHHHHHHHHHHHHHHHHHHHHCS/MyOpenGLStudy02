@@ -23,7 +23,8 @@ public:
 
 	Shader GetShader(const std::string& name);
 
-	Texture2D* LoadTexture(const std::string& name, const std::string& file, const std::string& directory = "Images/");
+	Texture2D* LoadTexture(const std::string& name, const std::string& file,
+	                       const std::string& directory = ConstConfigure::Image_Directory);
 
 	Texture2D* GetTexture(const std::string& name);
 

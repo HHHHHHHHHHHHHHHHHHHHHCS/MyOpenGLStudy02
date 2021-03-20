@@ -4,11 +4,12 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
-TextRenderer::TextRenderer(unsigned int width,unsigned int height, Shader textShader)
+TextRenderer::TextRenderer(unsigned int width, unsigned int height, Shader textShader)
 {
 	this->textShader = textShader;
 	textShader.Use();
-	textShader.SetMatrix4x4("projection",  glm::ortho(0.0f, static_cast<GLfloat>(width), static_cast<GLfloat>(height), 0.0f));
+	textShader.SetMatrix4x4("projection",
+	                        glm::ortho(0.0f, static_cast<GLfloat>(width), static_cast<GLfloat>(height), 0.0f));
 	textShader.SetInteger("_Text", 0);
 	glGenVertexArrays(1, &this->VAO);
 	glGenBuffers(1, &this->VBO);
@@ -44,7 +45,12 @@ void TextRenderer::Load(std::string font, unsigned int fontSize)
 	//控制的是所读取数据的对齐方式，默认4字节对齐，
 	//即一行的图像数据字节数必须是4的整数倍，即读取数据时，读取4个字节用来渲染一行
 	//这里黑白 既一个像素
+
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+	//128 16*8  
+	//for 找出最大size 然后设置最大的图片大小  不能超过4096
+	//然后ST
 
 	for (GLubyte c = 0; c < 128; c++)
 	{

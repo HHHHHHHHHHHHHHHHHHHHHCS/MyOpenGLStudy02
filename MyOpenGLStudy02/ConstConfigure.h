@@ -4,6 +4,7 @@
 class ConstConfigure
 {
 public:
+	static const std::string Root_Directory;
 	//Image
 	static const std::string Image_Directory;
 	static const std::string Image_BackgroundKey;
