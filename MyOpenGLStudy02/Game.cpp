@@ -19,7 +19,8 @@ const unsigned int Game::C_PlayerLife = 3;
  * 3.四边形的用四个顶点加顶点索引绘制  这将保存发送到 GPU 的三分之一数据。TRIANGLE_STRIP46
  * 4.空间区分计算碰撞
  * 5.减少状态切换 实现srp batcher
- * 6.打包 https://www.jianshu.com/p/0073859e9b0b
+ * 6.资源写到json 用key path 配置
+ * 7.打包 https://www.jianshu.com/p/0073859e9b0b
  */
 
 
