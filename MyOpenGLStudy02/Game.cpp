@@ -46,6 +46,8 @@ Game::~Game()
 	delete player;
 	delete ball;
 	delete particleGenerator;
+	delete textRenderer;
+	delete powerUpGenerator;
 	soundEngine->drop(); //已经delete了
 	soundEngine = nullptr;
 }
@@ -263,10 +265,10 @@ void Game::Render()
 	else if (this->state == GameState::GAME_WIN)
 	{
 		textRenderer->RenderText(
-			"You WON!!!", 320.0, this->height / 2 - 20.0, 1.0, glm::vec4(0.0, 1.0, 0.0, 1.0)
+			"You WON!!!", 320.0,  this->height / 2.0f - 20.0f, 1.0, glm::vec4(0.0, 1.0, 0.0, 1.0)
 		);
 		textRenderer->RenderText(
-			"Press ENTER to retry or ESC to quit", 130.0, this->height / 2, 1.0, glm::vec4(1.0, 1.0, 0.0, 1.0)
+			"Press ENTER to retry or ESC to quit", 130.0f, this->height / 2.0f, 1.0, glm::vec4(1.0, 1.0, 0.0, 1.0)
 		);
 	}
 }
