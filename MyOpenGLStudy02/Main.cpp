@@ -13,7 +13,7 @@ int main(int argc, char* argv[])
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	_CrtDumpMemoryLeaks();
-	 // _CrtSetBreakAlloc(198);
+	  // _CrtSetBreakAlloc(3476);
 	
 	//单独写个函数进行回收
 	DoMain();

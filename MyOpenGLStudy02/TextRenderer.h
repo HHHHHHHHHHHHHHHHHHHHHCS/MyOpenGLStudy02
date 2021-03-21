@@ -6,12 +6,11 @@
 
 struct Character
 {
-	// unsigned int textureID;
+	unsigned int textureID;
 	unsigned int index;
 	glm::ivec2 size; // size of glyph
 	glm::ivec2 bearing; // offset from baseline to left/top of glyph
 	unsigned int advance; // horizontal offset to advance to next glyph
-	unsigned char* data; //
 	glm::vec4 uvST; //size and offset in texture 
 };
 

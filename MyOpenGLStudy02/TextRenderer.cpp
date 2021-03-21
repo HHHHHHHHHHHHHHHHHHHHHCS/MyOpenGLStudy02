@@ -19,7 +19,7 @@ TextRenderer::TextRenderer(unsigned int width, unsigned int height, Shader textS
 	glGenBuffers(1, &this->VBO);
 	glBindVertexArray(this->VAO);
 	glBindBuffer(GL_ARRAY_BUFFER, this->VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 4 * 6, nullptr, GL_DYNAMIC_DRAW);
+	// glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 4 * 6, nullptr, GL_DYNAMIC_DRAW);
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), reinterpret_cast<const void*>(0));
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -45,6 +45,11 @@ void TextRenderer::Load(std::string font, unsigned int fontSize)
 	}
 
 	FT_Set_Pixel_Sizes(face, 0, fontSize);
+
+	//控制的是所读取数据的对齐方式，默认4字节对齐，
+	//即一行的图像数据字节数必须是4的整数倍，即读取数据时，读取4个字节用来渲染一行
+	//这里黑白 既一个像素
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
 
 	const int c_count = 128;
@@ -72,28 +77,46 @@ void TextRenderer::Load(std::string font, unsigned int fontSize)
 		}
 
 		Character character = {
+			-1,
 			index,
 			glm::ivec2(width, height),
 			glm::ivec2(face->glyph->bitmap_left, face->glyph->bitmap_top),
 			static_cast<unsigned int>(face->glyph->advance.x),
-			face->glyph->bitmap.buffer,
 			//glm::vec4(0)
 		};
+
+
+		glGenTextures(1, &character.textureID);
+		glBindTexture(GL_TEXTURE_2D, character.textureID);
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+		glTexImage2D(
+			GL_TEXTURE_2D,
+			0,
+			GL_RED,
+			width,
+			height,
+			0,
+			GL_RED,
+			GL_UNSIGNED_BYTE,
+			face->glyph->bitmap.buffer
+		);
 
 		characters.insert(std::pair<char, Character>(c, character));
 	}
 
 	const float unit = sqrt(static_cast<float>(c_count * maxX * maxY));
 	const unsigned int columnCount = static_cast<unsigned int>(ceil(unit / maxX));
-	const unsigned int rowCount = static_cast<unsigned int>(ceil(unit / maxY));
+	//+1 是因为 加一行char的高度  不然会少看见一行
+	const unsigned int rowCount = static_cast<unsigned int>(ceil(c_count / columnCount) + 1);
 	const float uv_T_X = 1.0f / columnCount;
 	const float uv_T_Y = 1.0f / rowCount;
-
-
-	//控制的是所读取数据的对齐方式，默认4字节对齐，
-	//即一行的图像数据字节数必须是4的整数倍，即读取数据时，读取4个字节用来渲染一行
-	//这里黑白 既一个像素
-	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	const float uv_S_X = columnCount * maxX;
+	const float uv_S_Y = rowCount * maxY;
 
 	//text big texture
 
@@ -117,50 +140,30 @@ void TextRenderer::Load(std::string font, unsigned int fontSize)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-	//char texture
-
-	unsigned int textID;
-	glGenTextures(1, &textID);
-	glBindTexture(GL_TEXTURE_2D, textID);
-
-
 	for (auto&& character : characters)
 	{
 		const unsigned int index = character.second.index;
 		const unsigned int width = character.second.size.x;
 		const unsigned int height = character.second.size.y;
 		const unsigned int xIndex = (index % columnCount);
-		const unsigned int yIndex = static_cast<unsigned int>(floor(index / rowCount));
+		const unsigned int yIndex = static_cast<unsigned int>(floor(index / columnCount));
 		const unsigned int xStartPos = maxX * xIndex;
 		const unsigned int yStartPos = maxY * yIndex;
 
-		glTexImage2D(
-			GL_TEXTURE_2D,
-			0,
-			GL_RED,
-			width,
-			height,
-			0,
-			GL_RED,
-			GL_UNSIGNED_BYTE,
-			character.second.data
-		);
-
-		//todo:这个API还有bug
-		//这个api需要gl 4.0
-		glCopyImageSubData(textID, GL_TEXTURE_2D, 0, 0, 0, 0
-		                   , textureID, GL_TEXTURE_2D, 0, xStartPos, yStartPos, 0, width, height, 0);
+		//这个api需要gl 4.3
+		glCopyImageSubData(character.second.textureID, GL_TEXTURE_2D, 0, 0, 0, 0
+		                   , textureID, GL_TEXTURE_2D, 0, xStartPos, yStartPos, 0, width, height, 1);
 
 		//这个api gl2.0 可以实现图片拷贝
 		//glCopyTexSubImage2D 
 
+		//这个api需要FBO
 		//这里有对图片进行放大 , 所以下面的UV T 就是 等比缩放了  不然还要 width/(columnCount * maxX)
 		// glBlitFramebuffer(0, 0, width, height, xStartPos, yStartPos, width, height,GL_COLOR_BUFFER_BIT, GL_LINEAR);
 
-
-		character.second.data = nullptr;
-		character.second.uvST = glm::vec4(xIndex * uv_T_X, yIndex * uv_T_Y
-		                                  , width / (columnCount * maxX), height / (rowCount * maxY));
+		glDeleteTextures(1, &character.second.textureID);
+		character.second.uvST = glm::vec4(static_cast<float>(width / uv_S_X), static_cast<float>(height / uv_S_Y)
+		                                  , xIndex * uv_T_X, yIndex * uv_T_Y);
 	}
 
 
@@ -170,8 +173,6 @@ void TextRenderer::Load(std::string font, unsigned int fontSize)
 
 	FT_Done_Face(face);
 	FT_Done_FreeType(ft);
-
-	glDeleteTextures(1, &textID);
 }
 
 void TextRenderer::RenderText(std::string text, float x, float y, float scale, glm::vec4 color)
@@ -179,10 +180,9 @@ void TextRenderer::RenderText(std::string text, float x, float y, float scale, g
 	textShader.Use();
 	textShader.SetVector4f("_TextColor", color);
 
-	glBindTexture(GL_TEXTURE_2D, textureID);
-
 
 	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, textureID);
 	glBindVertexArray(this->VAO);
 	glBindBuffer(GL_ARRAY_BUFFER, this->VBO);
 
@@ -191,9 +191,15 @@ void TextRenderer::RenderText(std::string text, float x, float y, float scale, g
 	//使用这种方法，我们依据字形顶部的点与顶部边差异的距离来向下推进字形。
 	const float cHeight = static_cast<float>(this->characters['H'].bearing.y);
 
+
+	const unsigned int textLength = text.length();
+	GLfloat* vertices = new GLfloat[textLength * 6 * 4];
+	unsigned int index = 0;
 	for (std::string::const_iterator c = text.begin(); c != text.end(); ++c)
 	{
 		Character ch = characters[*c];
+		// glBindTexture(GL_TEXTURE_2D, ch.textureID);
+
 
 		textShader.SetVector4f("_UV_ST", ch.uvST);
 
@@ -203,8 +209,8 @@ void TextRenderer::RenderText(std::string text, float x, float y, float scale, g
 		float w = ch.size.x * scale;
 		float h = ch.size.y * scale;
 
-		GLfloat vertices[6][4] =
-		{
+
+		GLfloat data[6][4] = {
 			{xPos, yPos + h, 0.0, 1.0},
 			{xPos + w, yPos, 1.0, 0.0},
 			{xPos, yPos, 0.0, 0.0},
@@ -214,12 +220,46 @@ void TextRenderer::RenderText(std::string text, float x, float y, float scale, g
 			{xPos + w, yPos, 1.0, 0.0}
 		};
 
-		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
-		glDrawArrays(GL_TRIANGLES, 0, 6);
+		memcpy(vertices + (index), data, sizeof(float) * 6 * 4);
+
+		// for (int i = 0; i < 6 * 4; i++)
+		// {
+		// 	// vertices[index + i] = (*data+i)+i;
+		// 	std::cout << vertices[index + i] << "_" << *data + i << "||" << *data[i] << '\n';
+		// }
+
+		// glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(float) * 6 * 4, vertices);
+		// glDrawArrays(GL_TRIANGLES, 0, 6);
+
+		// for (int i = 0; i < 6; i++)
+		// {
+		// 	std::cout << i << "->>" << (*(data + i))[0] << "||" << (*(data + i))[1]
+		// 		<< "||" << (*(data + i))[2] << "||" << (*(data + i))[3] << '\n';
+		// }
+		//
+		// std::cout << "==================\n";
+		//
+		// for (int i = 0; i < 6 * 4; i += 4)
+		// {
+		// 	std::cout << i/4 << "->>" << *(vertices + index + i + 0) << "||" << *(vertices + index + i + 1)
+		// 		<< "||" << *(vertices + index + i + 2) << "||" << *(vertices + index + i + 3) << '\n';
+		// }
+		//
+		// std::cout << "@@@@@@@@@@@@@@@@@@\n";
+
+
 		x += (ch.advance >> 6) * scale; //bitshift by 6 to get value in pixels (1/64th times 2^6 = 64)
+		index += 6 * 4;
 	}
+
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 4 * 6 * textLength, vertices, GL_STATIC_DRAW);
+	// glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(float) * textLength * 6 * 4, vertices);
+	glDrawArrays(GL_TRIANGLES, 0, 6 * textLength);
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 	glBindTexture(GL_TEXTURE_2D, 0);
+
+
+	delete[] vertices;
 }
