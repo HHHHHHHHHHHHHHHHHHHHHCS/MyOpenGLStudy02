@@ -52,10 +52,11 @@ glm::mat4 Camera::GetViewMat4()
 	rotFlag = false;
 
 	viewMat4 = glm::mat4(1.0f);
+	viewMat4 = glm::translate(viewMat4, position);
 	viewMat4 = glm::rotate(viewMat4, glm::radians(rotation.y), glm::vec3(0.0, 1.0, 0.0));
 	viewMat4 = glm::rotate(viewMat4, glm::radians(rotation.x), glm::vec3(1.0, 0.0, 0.0));
 	viewMat4 = glm::rotate(viewMat4, glm::radians(rotation.z), glm::vec3(0.0, 0.0, 1.0));
-	viewMat4 = glm::translate(viewMat4, position);
+	
 	
 	//摄像机空间 要翻转左右手坐标系   Z相反
     	viewMat4[0].z = -viewMat4[0].z;
