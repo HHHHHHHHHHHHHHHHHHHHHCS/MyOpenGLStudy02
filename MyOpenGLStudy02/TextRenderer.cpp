@@ -21,7 +21,10 @@ TextRenderer::TextRenderer(unsigned int width, unsigned int height, Shader textS
 	glBindBuffer(GL_ARRAY_BUFFER, this->VBO);
 	// glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 4 * 6, nullptr, GL_DYNAMIC_DRAW);
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), reinterpret_cast<const void*>(0));
+	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 6 * sizeof(float), reinterpret_cast<const void*>(0));
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 6 * sizeof(float),
+	                      reinterpret_cast<const void*>(4 * sizeof(float)));
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 }
@@ -190,18 +193,16 @@ void TextRenderer::RenderText(std::string text, float x, float y, float scale, g
 	//那么我们通过接触顶部的字形的bearingY减去顶部不确定字形的bearingY来计算红色矢量的长度。
 	//使用这种方法，我们依据字形顶部的点与顶部边差异的距离来向下推进字形。
 	const float cHeight = static_cast<float>(this->characters['H'].bearing.y);
+	const unsigned int textLength =  text.length();
+	GLfloat* vertices = new GLfloat[4 * 6 * textLength];
+	unsigned int* indices = new unsigned int[6 * textLength];
 
-
-	const unsigned int textLength = text.length();
-	GLfloat* vertices = new GLfloat[textLength * 6 * 4];
 	unsigned int index = 0;
-	for (std::string::const_iterator c = text.begin(); c != text.end(); ++c)
+	for (std::string::const_iterator c = text.begin() ; c != text.end(); ++c )
 	{
 		Character ch = characters[*c];
-		// glBindTexture(GL_TEXTURE_2D, ch.textureID);
 
-
-		textShader.SetVector4f("_UV_ST", ch.uvST);
+		// textShader.SetVector4f("_UV_ST", ch.uvST);
 
 		float xPos = x + ch.bearing.x * scale;
 		float yPos = y + (cHeight - ch.bearing.y) * scale;
@@ -210,51 +211,35 @@ void TextRenderer::RenderText(std::string text, float x, float y, float scale, g
 		float h = ch.size.y * scale;
 
 
-		GLfloat data[6][4] = {
-			{xPos, yPos + h, 0.0, 1.0},
-			{xPos + w, yPos, 1.0, 0.0},
-			{xPos, yPos, 0.0, 0.0},
-
-			{xPos, yPos + h, 0.0, 1.0},
-			{xPos + w, yPos + h, 1.0, 1.0},
-			{xPos + w, yPos, 1.0, 0.0}
+		GLfloat data[4][6] =
+		{
+			{xPos, yPos, 0.0, 0.0, ch.uvST.z, ch.uvST.w},
+			{xPos, yPos + h, 0.0, 1.0, ch.uvST.z, ch.uvST.y + ch.uvST.w},
+			{xPos + w, yPos, 1.0, 0.0, ch.uvST.z + ch.uvST.x, ch.uvST.w},
+			{xPos + w, yPos + h, 1.0, 1.0, ch.uvST.z + ch.uvST.x, ch.uvST.w + ch.uvST.y},
 		};
 
-		memcpy(vertices + (index), data, sizeof(float) * 6 * 4);
+		const unsigned int vertexOffset = 4 * index;
+		const unsigned int indicesOffset = 6 * index;
 
-		// for (int i = 0; i < 6 * 4; i++)
-		// {
-		// 	// vertices[index + i] = (*data+i)+i;
-		// 	std::cout << vertices[index + i] << "_" << *data + i << "||" << *data[i] << '\n';
-		// }
+		indices[indicesOffset + 0] = vertexOffset;
+		indices[indicesOffset + 5] = vertexOffset + 3;
+		indices[indicesOffset + 2] = indices[indicesOffset + 3] = vertexOffset + 2;
+		indices[indicesOffset + 1] = indices[indicesOffset + 4] = vertexOffset + 1;
 
-		// glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(float) * 6 * 4, vertices);
-		// glDrawArrays(GL_TRIANGLES, 0, 6);
 
-		// for (int i = 0; i < 6; i++)
-		// {
-		// 	std::cout << i << "->>" << (*(data + i))[0] << "||" << (*(data + i))[1]
-		// 		<< "||" << (*(data + i))[2] << "||" << (*(data + i))[3] << '\n';
-		// }
-		//
-		// std::cout << "==================\n";
-		//
-		// for (int i = 0; i < 6 * 4; i += 4)
-		// {
-		// 	std::cout << i/4 << "->>" << *(vertices + index + i + 0) << "||" << *(vertices + index + i + 1)
-		// 		<< "||" << *(vertices + index + i + 2) << "||" << *(vertices + index + i + 3) << '\n';
-		// }
-		//
-		// std::cout << "@@@@@@@@@@@@@@@@@@\n";
-
+		memcpy(vertices + (index * 4 * 6), data, sizeof(float) * 4 * 6);
 
 		x += (ch.advance >> 6) * scale; //bitshift by 6 to get value in pixels (1/64th times 2^6 = 64)
-		index += 6 * 4;
+		index++;
 	}
 
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 4 * 6 * textLength, vertices, GL_STATIC_DRAW);
 	// glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(float) * textLength * 6 * 4, vertices);
-	glDrawArrays(GL_TRIANGLES, 0, 6 * textLength);
+	// glDrawArrays(GL_TRIANGLES, 0, 6 * textLength);
+
+
+	glDrawElements(GL_TRIANGLES, 2 * 3 * textLength, GL_UNSIGNED_INT, indices);
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
@@ -262,4 +247,5 @@ void TextRenderer::RenderText(std::string text, float x, float y, float scale, g
 
 
 	delete[] vertices;
+	delete[] indices;
 }

@@ -14,7 +14,7 @@ const unsigned int Game::C_PlayerLife = 3;
 
 /*
  * TODO:
- * 1.字体:放一个图片上,mesh combine, 添加一个text类  settext  mesh尽量少发生改变
+ * [50%]1.字体:放一个图片上,mesh combine, 添加一个text类  settext  mesh尽量少发生改变
  * 2.砖块用drawinstance绘制 , 图片打成图集combine
  * 3.四边形的用四个顶点加顶点索引绘制  这将保存发送到 GPU 的三分之一数据。TRIANGLE_STRIP46
  * 4.空间区分计算碰撞
