@@ -42,7 +42,7 @@ Game::Game(GLuint _width, GLuint _height)
 Game::~Game()
 {
 	delete postProcessor;
-	delete spriteRenderer;
+	delete spriteRenderer;	
 	delete player;
 	delete ball;
 	delete particleGenerator;

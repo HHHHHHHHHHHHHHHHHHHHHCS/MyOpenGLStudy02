@@ -109,7 +109,12 @@ Shader ResourceManager::LoadShaderFromFile(const GLchar* vShaderFile, const GLch
 	const GLchar* gShaderCode = geometryCode.c_str();
 
 	Shader shader;
-	shader.Compile(vShaderCode, fShaderCode, gShaderFile != nullptr ? gShaderCode : nullptr);
+	bool isSuccess = shader.Compile(vShaderCode, fShaderCode, gShaderFile != nullptr ? gShaderCode : nullptr);
+
+	if(!isSuccess)
+	{
+		std::cout << "ERROR::SHADER:compile shader file ! Path:" << vShaderFile << std::endl;
+	}
 
 	return shader;
 }

@@ -12,27 +12,39 @@ Shader& Shader::Use()
 	return *this;
 }
 
-void Shader::Compile(const GLchar* vertexCode, const GLchar* fragmentCode, const GLchar* geometryCode)
+bool Shader::Compile(const GLchar* vertexCode, const GLchar* fragmentCode, const GLchar* geometryCode)
 {
 	GLuint vertexShader, fragmentShader, geometryShader;
+
+	bool result = true;
 
 	//Vertex Shader
 	vertexShader = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(vertexShader, 1, &vertexCode, NULL);
 	glCompileShader(vertexShader);
-	CheckCompileErrors(vertexShader, "VERTEX");
+	if (!CheckCompileErrors(vertexShader, "VERTEX"))
+	{
+		result = false;
+	}
+
 	//Fragment Shader
 	fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 	glShaderSource(fragmentShader, 1, &fragmentCode, NULL);
 	glCompileShader(fragmentShader);
-	CheckCompileErrors(fragmentShader, "FRAGMENT");
+	if (!CheckCompileErrors(fragmentShader, "FRAGMENT"))
+	{
+		result = false;
+	}
 	//Geometry Shader
 	if (geometryCode != nullptr)
 	{
 		geometryShader = glCreateShader(GL_GEOMETRY_SHADER);
 		glShaderSource(geometryShader, 1, &geometryCode, NULL);
 		glCompileShader(geometryShader);
-		CheckCompileErrors(geometryShader, "GEOMETRY");
+		if (!CheckCompileErrors(geometryShader, "GEOMETRY"))
+		{
+			result = false;
+		}
 	}
 	//Shader program
 	this->ID = glCreateProgram();
@@ -44,13 +56,18 @@ void Shader::Compile(const GLchar* vertexCode, const GLchar* fragmentCode, const
 		glAttachShader(this->ID, geometryShader);
 	}
 	glLinkProgram(this->ID);
-	CheckCompileErrors(this->ID, "PROGRAM");
+	if (!CheckCompileErrors(this->ID, "PROGRAM"))
+	{
+		result = false;
+	}
 	glDeleteShader(vertexShader);
 	glDeleteShader(fragmentShader);
 	if (geometryCode != nullptr)
 	{
 		glDeleteShader(geometryShader);
 	}
+
+	return result;
 }
 
 void Shader::SetFloat(const GLchar* name, GLfloat value, bool useShader)
@@ -153,7 +170,7 @@ void Shader::SetVector1fArray(const GLchar* name, const GLint length, const GLfl
 	glUniform1fv(glGetUniformLocation(this->ID, name), length, value);
 }
 
-void Shader::SetVector2fArray(const GLchar* name,const GLint length, const GLfloat* value, bool useShader)
+void Shader::SetVector2fArray(const GLchar* name, const GLint length, const GLfloat* value, bool useShader)
 {
 	if (useShader)
 	{
@@ -162,7 +179,7 @@ void Shader::SetVector2fArray(const GLchar* name,const GLint length, const GLflo
 	glUniform2fv(glGetUniformLocation(this->ID, name), length, value);
 }
 
-void Shader::CheckCompileErrors(GLuint object, std::string type)
+bool Shader::CheckCompileErrors(GLuint object, std::string type)
 {
 	GLint success;
 	GLchar infoLog[1024];
@@ -176,6 +193,7 @@ void Shader::CheckCompileErrors(GLuint object, std::string type)
 			std::cout << "| ERROR:: SHADER: Compile-time error:Type: " << type << "\n"
 				<< infoLog << "\n -- --------------------------------------------------- -- "
 				<< std::endl;
+			return false;
 		}
 	}
 	else // if(type == "PROGRAM")
@@ -187,6 +205,8 @@ void Shader::CheckCompileErrors(GLuint object, std::string type)
 			std::cout << "| ERROR::Shader: Link-time error: Type: " << type << "\n"
 				<< infoLog << "\n -- --------------------------------------------------- -- "
 				<< std::endl;
+			return false;
 		}
 	}
+	return true;
 }

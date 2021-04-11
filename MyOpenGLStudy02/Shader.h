@@ -12,7 +12,7 @@ public:
 	Shader();
 
 	Shader& Use();
-	void Compile(const GLchar* vertexCode, const GLchar* fragmentCode, const GLchar* geometryCode = nullptr);
+	bool Compile(const GLchar* vertexCode, const GLchar* fragmentCode, const GLchar* geometryCode = nullptr);
 	//Utility functions
 	void SetFloat(const GLchar* name, GLfloat value, bool useShader = false);
 	void SetInteger(const GLchar* name, GLint value, bool useShader = false);
@@ -28,5 +28,5 @@ public:
 	void SetVector2fArray(const GLchar* name, GLint length, const GLfloat* value, bool useShader = false);
 private:
 	//检查编译错误
-	void CheckCompileErrors(GLuint object, std::string type);
+	bool CheckCompileErrors(GLuint object, std::string type);
 };
