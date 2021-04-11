@@ -3,6 +3,7 @@
 #include <vec2.hpp>
 
 #include "Shader.h"
+#include "TextComponent.h"
 
 struct Character
 {
@@ -18,11 +19,22 @@ class TextRenderer
 {
 public:
 	std::map<char, Character> characters;
+	std::map<std::string, TextComponent*> textComponents;
+
 	Shader textShader;
 
 	TextRenderer(unsigned int width, unsigned int height, Shader textShader);
+	~TextRenderer();
+	
 	void Load(std::string font, unsigned int fontSize);
 	void RenderText(std::string text, float x, float y, float scale, glm::vec4 color = glm::vec4(1.0f));
+
+	TextComponent* CreateTextComponent(std::string id);
+	TextComponent* CreateTextComponent(std::string id, std::string text, float x, float y, float scale,
+	                                  glm::vec4 color = glm::vec4(1.0f));
+	TextComponent* GetTextComponent(std::string id);
+	void RenderTextComponent(std::string id);
+	void RenderTextComponent(TextComponent& component);
 
 private:
 	unsigned int VAO, VBO, textureID;

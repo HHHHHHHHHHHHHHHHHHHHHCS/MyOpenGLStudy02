@@ -4,6 +4,8 @@
 #include <ft2build.h>
 #include <iostream>
 #include <ostream>
+#include <utility>
+
 
 #include FT_FREETYPE_H
 
@@ -25,8 +27,17 @@ TextRenderer::TextRenderer(unsigned int width, unsigned int height, Shader textS
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 6 * sizeof(float),
 	                      reinterpret_cast<const void*>(4 * sizeof(float)));
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
 	glBindVertexArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
+TextRenderer::~TextRenderer()
+{
+	for (auto&& item : textComponents)
+	{
+		delete item.second;
+	}
 }
 
 void TextRenderer::Load(std::string font, unsigned int fontSize)
@@ -193,12 +204,12 @@ void TextRenderer::RenderText(std::string text, float x, float y, float scale, g
 	//那么我们通过接触顶部的字形的bearingY减去顶部不确定字形的bearingY来计算红色矢量的长度。
 	//使用这种方法，我们依据字形顶部的点与顶部边差异的距离来向下推进字形。
 	const float cHeight = static_cast<float>(this->characters['H'].bearing.y);
-	const unsigned int textLength =  text.length();
+	const unsigned int textLength = text.length();
 	GLfloat* vertices = new GLfloat[4 * 6 * textLength];
 	unsigned int* indices = new unsigned int[6 * textLength];
 
 	unsigned int index = 0;
-	for (std::string::const_iterator c = text.begin() ; c != text.end(); ++c )
+	for (std::string::const_iterator c = text.begin(); c != text.end(); ++c)
 	{
 		Character ch = characters[*c];
 
@@ -241,11 +252,62 @@ void TextRenderer::RenderText(std::string text, float x, float y, float scale, g
 
 	glDrawElements(GL_TRIANGLES, 2 * 3 * textLength, GL_UNSIGNED_INT, indices);
 
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindTexture(GL_TEXTURE_2D, 0);
 
 
 	delete[] vertices;
 	delete[] indices;
+}
+
+TextComponent* TextRenderer::CreateTextComponent(const std::string id)
+{
+	delete GetTextComponent(id);
+	TextComponent* tc = new TextComponent(this);
+	textComponents[id] = tc;
+	return tc;
+}
+
+
+TextComponent* TextRenderer::CreateTextComponent(std::string id, std::string text, float x, float y, float scale,
+                                                 glm::vec4 color)
+{
+	delete GetTextComponent(id);
+	TextComponent* tc = new TextComponent(this, std::move(text), x, y, scale, color);
+	textComponents[id] = tc;
+	return tc;
+}
+
+TextComponent* TextRenderer::GetTextComponent(const std::string id)
+{
+	auto it = textComponents.find(id);
+	if (it == textComponents.end())
+	{
+		// std::cout << "Find TextComponent Error! ID: " + id << std::endl;
+		return nullptr;
+	}
+	return it->second;
+}
+
+void TextRenderer::RenderTextComponent(const std::string id)
+{
+	auto it = textComponents.find(id);
+	if (it != textComponents.end())
+	{
+		it->second->Render();
+	}
+}
+
+
+void TextRenderer::RenderTextComponent(TextComponent& component)
+{
+	textShader.Use();
+	textShader.SetVector4f("_TextColor", component.color);
+
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, textureID);
+
+	component.DoRender();
 }

@@ -14,8 +14,8 @@ const unsigned int Game::C_PlayerLife = 3;
 
 /*
  * TODO:
- * [50%]1.字体:放一个图片上,mesh combine, 添加一个text类  settext  mesh尽量少发生改变
- * 2.砖块用drawinstance绘制 , 图片打成图集combine
+ * [V]1.字体:放一个图片上,mesh combine, 添加一个text类  settext  mesh尽量少发生改变
+ * [0%]2.砖块用drawinstance绘制 , 图片打成图集combine
  * 3.四边形的用四个顶点加顶点索引绘制  这将保存发送到 GPU 的三分之一数据。TRIANGLE_STRIP46
  * 4.空间区分计算碰撞
  * 5.减少状态切换 实现srp batcher
@@ -42,7 +42,7 @@ Game::Game(GLuint _width, GLuint _height)
 Game::~Game()
 {
 	delete postProcessor;
-	delete spriteRenderer;	
+	delete spriteRenderer;
 	delete player;
 	delete ball;
 	delete particleGenerator;
@@ -80,8 +80,13 @@ void Game::Init()
 		resourceManager.GetShader(ConstConfigure::Shader_ParticleKey), camera.GetViewProjection()
 		, resourceManager.GetTexture(ConstConfigure::Image_ParticleKey), 500);
 
-	// textRenderer->RenderText("Press ENTER to start", 250.0f, this->height / 2.0f, 1.0f);
-	// textRenderer->RenderText("Press ENTER to start", 250.0f, this->height / 2.0f, 1.0f);
+
+	textRenderer->CreateTextComponent("Start", "Press ENTER to start", 250.0f, this->height / 2.0f, 1.0f);
+	textRenderer->CreateTextComponent("Select", "Press W or S to select level", 245.0f, this->height / 2 + 20.0f, 0.75f);
+	textRenderer->CreateTextComponent("Life", "", 5.0f, 5.0f, 1.0f);
+	textRenderer->CreateTextComponent("WON", "You WON!!!", 320.0, this->height / 2.0f - 20.0f, 1.0, glm::vec4(0.0, 1.0, 0.0, 1.0));
+	textRenderer->CreateTextComponent("Quit", "Press ENTER to retry or ESC to quit", 130.0f, this->height / 2.0f, 1.0, glm::vec4(1.0, 1.0, 0.0, 1.0));
+
 }
 
 void Game::InitRes()
@@ -258,21 +263,19 @@ void Game::Render()
 
 	if (this->state == GameState::GAME_MENU)
 	{
-		textRenderer->RenderText("Press ENTER to start", 250.0f, this->height / 2.0f, 1.0f);
-		textRenderer->RenderText("Press W or S to select level", 245.0f, this->height / 2 + 20.0f, 0.75f);
+		textRenderer->RenderTextComponent("Start");
+		textRenderer->RenderTextComponent("Select");
 	}
 	else if (this->state == GameState::GAME_ACTIVE)
 	{
-		textRenderer->RenderText("Life:" + std::to_string(this->life), 5.0f, 5.0f, 1.0f);
+		TextComponent* life = textRenderer->GetTextComponent("Life");
+		life->SetText("Life:" + std::to_string(this->life));
+		life->Render();
 	}
 	else if (this->state == GameState::GAME_WIN)
 	{
-		textRenderer->RenderText(
-			"You WON!!!", 320.0,  this->height / 2.0f - 20.0f, 1.0, glm::vec4(0.0, 1.0, 0.0, 1.0)
-		);
-		textRenderer->RenderText(
-			"Press ENTER to retry or ESC to quit", 130.0f, this->height / 2.0f, 1.0, glm::vec4(1.0, 1.0, 0.0, 1.0)
-		);
+		textRenderer->RenderTextComponent("Won");
+		textRenderer->RenderTextComponent("Quit");
 	}
 }
 
