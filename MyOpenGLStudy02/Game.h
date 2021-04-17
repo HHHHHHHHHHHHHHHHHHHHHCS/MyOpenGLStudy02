@@ -39,6 +39,7 @@ public:
 	KeyInput keyInput{};
 	ResourceManager resourceManager{};
 	SpriteRenderer* spriteRenderer = nullptr;
+	SpriteInstanceRenderer* spriteInstanceRenderer = nullptr;
 	ParticleGenerator* particleGenerator = nullptr;
 	PowerUpGenerator* powerUpGenerator = nullptr;
 	PostProcessor* postProcessor = nullptr;

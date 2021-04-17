@@ -20,6 +20,7 @@ public:
 	void Load(const std::string& file, GLuint levelWidth, GLuint levelHeight, const std::string& directory = ConstConfigure::Level_Directory);
 	//渲染关卡
 	void Draw(SpriteRenderer& renderer);
+	void DrawInstance(SpriteInstanceRenderer& instanceRenderer);
 	//检查一个关卡是否完成(所有非坚硬的块都被摧毁)
 	GLboolean IsCompleted();
 private:

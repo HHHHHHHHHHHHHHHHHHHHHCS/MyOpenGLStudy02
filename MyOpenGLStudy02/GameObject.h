@@ -4,6 +4,7 @@
 #include <vec3.hpp>
 
 #include "SpriteRenderer.h"
+#include "SpriteInstanceRenderer.h"
 #include "Texture2D.h"
 
 class GameObject
@@ -26,4 +27,5 @@ public:
 	           , const glm::vec2& _velocity = glm::vec2(0.0f, 0.0f));
 	//draw sprite
 	virtual void Draw(SpriteRenderer& renderer);
+	void DrawInstance(SpriteInstanceRenderer& renderer);
 };

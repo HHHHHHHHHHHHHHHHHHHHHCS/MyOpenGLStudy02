@@ -189,6 +189,7 @@
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="Rigibody2D.cpp" />
     <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="SpriteInstanceRenderer.cpp" />
     <ClCompile Include="SpriteRenderer.cpp" />
     <ClCompile Include="TextComponent.cpp" />
     <ClCompile Include="TextRenderer.cpp" />
@@ -214,6 +215,7 @@
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="Rigibody2D.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="SpriteInstanceRenderer.h" />
     <ClInclude Include="SpriteRenderer.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="TextComponent.h" />

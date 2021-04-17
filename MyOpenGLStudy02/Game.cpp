@@ -43,6 +43,7 @@ Game::~Game()
 {
 	delete postProcessor;
 	delete spriteRenderer;
+	delete spriteInstanceRenderer;
 	delete player;
 	delete ball;
 	delete particleGenerator;
@@ -71,6 +72,10 @@ void Game::Init()
 	spriteShader.Use().SetInteger("image", 0);
 	spriteShader.SetMatrix4x4("viewProjection", camera.GetViewProjection());
 	spriteRenderer = new SpriteRenderer(spriteShader);
+	Shader spriteInstanceShader = resourceManager.GetShader(ConstConfigure::Shader_SpriteInstanceKey);
+	spriteInstanceShader.Use().SetInteger("image", 0);
+	spriteInstanceShader.SetMatrix4x4("viewProjection", camera.GetViewProjection());
+	spriteInstanceRenderer = new SpriteInstanceRenderer(spriteInstanceShader);
 	player = new PlayerObject(mapSize, resourceManager.GetTexture(ConstConfigure::Image_PaddleKey));
 	const glm::vec2 ballPos = player->position + glm::vec2(player->size.x / 2 - BallObject::C_BallRadius,
 	                                                       PlayerObject::C_PlayerSize.y);
@@ -94,6 +99,7 @@ void Game::InitRes()
 	//load 这一块其实可以放到json/xml 里面做
 	//Shader
 	resourceManager.LoadShader(ConstConfigure::Shader_SpriteKey, ConstConfigure::Shader_SpritePath);
+	resourceManager.LoadShader(ConstConfigure::Shader_SpriteInstanceKey, ConstConfigure::Shader_SpriteInstancePath);
 	resourceManager.LoadShader(ConstConfigure::Shader_ParticleKey, ConstConfigure::Shader_ParticlePath);
 	resourceManager.LoadShader(ConstConfigure::Shader_PostProcessKey, ConstConfigure::Shader_PostProcessPath);
 	resourceManager.LoadShader(ConstConfigure::Shader_TextKey, ConstConfigure::Shader_TextPath);
@@ -245,7 +251,8 @@ void Game::Render()
 
 	spriteRenderer->DrawSprite(resourceManager.GetTexture(ConstConfigure::Image_BackgroundKey)
 	                           , glm::vec2(0, 0), glm::vec2(this->width, this->height), 0);
-	this->levels[this->level].Draw(*spriteRenderer);
+	// this->levels[this->level].Draw(*spriteRenderer);
+	this->levels[this->level].DrawInstance(*spriteInstanceRenderer);
 
 	this->powerUpGenerator->Draw(*spriteRenderer);
 

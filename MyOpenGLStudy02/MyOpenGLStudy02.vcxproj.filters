@@ -90,6 +90,9 @@
     <ClCompile Include="TextComponent.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="SpriteInstanceRenderer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -162,6 +165,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="TextComponent.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteInstanceRenderer.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

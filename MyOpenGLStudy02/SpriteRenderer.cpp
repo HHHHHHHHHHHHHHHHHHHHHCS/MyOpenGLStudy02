@@ -24,14 +24,9 @@ void SpriteRenderer::InitRenderData()
 
 	isInit = true;
 
-	GLuint quadVBO;
 	GLfloat vertices[] = {
 		//位置	//纹理
-		0.0f, 1.0f, 0.0f, 1.0f,
 		0.0f, 0.0f, 0.0f, 0.0f,
-		1.0f, 0.0f, 1.0f, 0.0f,
-
-
 		0.0f, 1.0f, 0.0f, 1.0f,
 		1.0f, 0.0f, 1.0f, 0.0f,
 		1.0f, 1.0f, 1.0f, 1.0f,
@@ -44,9 +39,11 @@ void SpriteRenderer::InitRenderData()
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
 	glBindVertexArray(quadVAO);
+
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), reinterpret_cast<const GLvoid*>(0));
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
 	glBindVertexArray(0);
 }
 
@@ -75,14 +72,14 @@ void SpriteRenderer::DrawSprite(Texture2D* texture, const glm::vec2& position, c
 	this->shader.Use();
 
 	const glm::mat4& model = ModelMatrix(position, size, rotate);
-	
+
 	this->shader.SetMatrix4x4("model", model);
 	this->shader.SetVector3f("spriteColor", color);
 
 	texture->Bind(0);
 
 	glBindVertexArray(this->quadVAO);
-	glDrawArrays(GL_TRIANGLES, 0, 6);
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
 	glBindVertexArray(0);
 }

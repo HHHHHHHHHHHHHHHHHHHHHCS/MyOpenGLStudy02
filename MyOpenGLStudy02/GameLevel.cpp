@@ -59,6 +59,17 @@ void GameLevel::Draw(SpriteRenderer& renderer)
 	}
 }
 
+void GameLevel::DrawInstance(SpriteInstanceRenderer& instanceRenderer)
+{
+	for (GameObject& tile : this->bricks)
+	{
+		if (!tile.destroyed)
+		{
+			tile.DrawInstance(instanceRenderer);
+		}
+	}
+}
+
 //检查一个关卡是否完成(所有非坚硬的块都被摧毁)
 GLboolean GameLevel::IsCompleted()
 {

@@ -36,6 +36,8 @@ public:
 	static const std::string Shader_Directory;
 	static const std::string Shader_SpriteKey;
 	static const std::string Shader_SpritePath;
+	static const std::string Shader_SpriteInstanceKey;
+	static const std::string Shader_SpriteInstancePath;
 	static const std::string Shader_ParticleKey;
 	static const std::string Shader_ParticlePath;
 	static const std::string Shader_PostProcessKey;

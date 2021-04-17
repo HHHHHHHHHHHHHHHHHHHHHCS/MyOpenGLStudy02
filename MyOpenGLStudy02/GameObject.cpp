@@ -20,3 +20,9 @@ void GameObject::Draw(SpriteRenderer& renderer)
 	renderer.DrawSprite(this->sprite, this->position, this->size, this->rotation, this->color);
 }
 
+
+void GameObject::DrawInstance(SpriteInstanceRenderer& renderer)
+{
+	renderer.DrawSpriteInstance(this->sprite, this->position, this->size, this->rotation, this->color);
+}
+
