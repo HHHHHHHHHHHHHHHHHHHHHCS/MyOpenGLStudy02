@@ -13,9 +13,9 @@
 const unsigned int Game::C_PlayerLife = 3;
 
 /*
- * TODO:
+ * TODO:不做了
  * [V]1.字体:放一个图片上,mesh combine, 添加一个text类  settext  mesh尽量少发生改变
- * [0%]2.砖块用drawinstance绘制 , 图片打成图集combine
+ * [25%]2.砖块用drawinstance绘制 , 图片打成图集combine
  * 3.四边形的用四个顶点加顶点索引绘制  这将保存发送到 GPU 的三分之一数据。TRIANGLE_STRIP46
  * 4.空间区分计算碰撞
  * 5.减少状态切换 实现srp batcher
@@ -251,8 +251,8 @@ void Game::Render()
 
 	spriteRenderer->DrawSprite(resourceManager.GetTexture(ConstConfigure::Image_BackgroundKey)
 	                           , glm::vec2(0, 0), glm::vec2(this->width, this->height), 0);
-	// this->levels[this->level].Draw(*spriteRenderer);
-	this->levels[this->level].DrawInstance(*spriteInstanceRenderer);
+	this->levels[this->level].Draw(*spriteRenderer);
+	// this->levels[this->level].DrawInstance(*spriteInstanceRenderer);
 
 	this->powerUpGenerator->Draw(*spriteRenderer);
 
